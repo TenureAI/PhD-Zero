@@ -1,0 +1,4 @@
+interface:
+  display_name: "Human Checkpoint"
+  short_description: "Escalate risky decisions with clear options."
+  default_prompt: "Use human checkpoint when a decision requires user confirmation, especially for risky or expensive actions."
