@@ -1,0 +1,31 @@
+name: Skill Links
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate skill layout
+        run: |
+          set -euo pipefail
+          agents=$(find .agents/skills -mindepth 1 -maxdepth 1 \( -type d -o -type l \) -exec basename {} \; | sort)
+          claude=$(find .claude/skills -mindepth 1 -maxdepth 1 -type l -exec basename {} \; | sort)
+          test "$agents" = "$claude"
+          find .agents/skills -mindepth 1 -maxdepth 1 -type d | while read -r skill; do
+            test -f "$skill/SKILL.md"
+          done
+          find .claude/skills -mindepth 1 -maxdepth 1 -type l | while read -r link; do
+            target=$(readlink "$link")
+            test -n "$target"
+            test -f "$link/SKILL.md"
+          done
