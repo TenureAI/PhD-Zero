@@ -1,0 +1,4 @@
+interface:
+  display_name: "Run Governor"
+  short_description: "Control run mode, paths, stage reports, and per-run safety allowances."
+  default_prompt: "Use run governor to initialize run_id, choose interaction mode, enforce stage reporting, and manage per-run safety policy for research execution."

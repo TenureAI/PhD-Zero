@@ -1,4 +1,4 @@
 interface:
   display_name: "Research Workflow"
-  short_description: "Evidence-first loop for AI R&D execution."
-  default_prompt: "Use the research workflow to intake, plan, act, evaluate, and reflect on AI research tasks."
+  short_description: "Mode-aware evidence loop for AI R&D execution."
+  default_prompt: "Use research workflow to understand requirements, plan, execute with working todo tracking, replan on major issues, and emit stage reports."

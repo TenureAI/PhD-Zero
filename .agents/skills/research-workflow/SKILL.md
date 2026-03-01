@@ -1,62 +1,127 @@
 ---
 name: research-workflow
-description: Run an evidence-driven AI R&D execution loop from task intake to reflection and consolidation. Use when handling research tasks such as repo, paper, issue, and documentation analysis, baseline reproduction, training/evaluation debugging, experiment planning, and iterative delivery. Trigger when requests mention research workflow, research_workflow, baseline reproduction, model debugging, literature scan, or next-step experiment decisions.
+description: Run a mode-aware, evidence-driven AI R&D workflow from intake to completion for research tasks such as code/paper analysis, debugging, reproduction, planning, and iterative delivery. Use when a non-trivial research task needs structured phases, stage reporting, replanning control, and integration with run-governor, memory-manager, deep-research, human-checkpoint, and experiment-execution.
 ---
 
 # Research Workflow
 
 ## Mission
-Drive AI R&D tasks with small, testable, evidence-first steps.
 
-## Default Loop
-Execute this loop every cycle:
-1. Intake task.
-2. Understand current state.
-3. Search broadly for relevant evidence (repo files, papers, issues, docs, logs, prior runs).
-4. Plan minimal next step.
-5. Recall relevant memory before expensive or irreversible actions.
-6. Act.
-7. Observe outputs and artifacts.
-8. Reason from evidence.
-9. Evaluate against success criteria.
-10. Decide: continue, done, checkpoint, or reflect.
+Drive AI R&D tasks with small, testable, evidence-first steps while respecting the selected interaction mode.
 
-## Stage Rules
-1. Define explicit success criteria before non-trivial actions.
-2. Prefer the lowest-cost step that can falsify the current hypothesis.
-3. Record commands, file changes, metrics, and errors as evidence.
-4. Start with broad evidence collection before committing to a path.
-5. Re-check memory before long training, broad experiment sweeps, or protocol changes.
-6. Trigger `human-checkpoint` when uncertainty, cost, impact, or risk is high.
-7. End each major phase with a state summary and next decision.
+## Orchestration Order
 
-## Search and Evidence Collection
-Collect context widely before major decisions:
-1. Inspect local codebase, configs, scripts, logs, and experiment artifacts.
-2. Read related papers, official docs, issues, benchmark protocols, and shared memory repositories when available.
-3. Compare multiple sources when claims conflict.
-4. Prefer primary sources over secondary summaries.
-5. Summarize collected evidence into concrete hypotheses and next actions.
+For non-trivial tasks, run this order:
+
+1. Initialize run policy with `run-governor`.
+2. Understand user objective and current code/evidence state.
+3. Clarify ambiguous requirements (frequency depends on mode).
+4. Run deep research when needed.
+5. Build an execution plan.
+6. Confirm plan as required by mode.
+7. Execute with working-memory todo tracking.
+8. Replan on major issues when needed.
+9. Emit stage reports and maintain report index.
+10. Close task, then optionally publish shared memory.
+
+## Mode-Aware Interaction Policy
+
+Follow run mode from `run-governor`:
+
+1. `full-auto`
+   - Prefer autonomous decisions.
+   - Ask user only for hard blockers or major safety risks.
+2. `moderate`
+   - Confirm finalized plan.
+   - Confirm before high-resource actions.
+3. `detailed`
+   - Ask on unclear path.
+   - Ask before high-resource actions.
+
+If user explicitly asks to switch mode, switch immediately.
+
+## Default Execution Loop
+
+Repeat this loop until completion:
+
+1. Update success criteria.
+2. Collect or refresh evidence.
+3. Plan the smallest useful next action.
+4. Refresh working todo state.
+5. Act.
+6. Observe outputs.
+7. Evaluate result quality and risk.
+8. Decide: iterate, replan, checkpoint, or done.
+
+## Search, Memory, and Deep-Research Policy
+
+Use these in combination:
+
+1. Treat memory as an optional accelerator, not a hard prerequisite.
+2. Use search/deep research directly when topic is time-sensitive, new, or currently blocked.
+3. For unknown errors, use this branch:
+   - local evidence triage (logs, stack trace, recent changes)
+   - targeted search
+   - deep research (debug-investigation) if still unresolved
+   - minimal fix validation
+4. If skipping memory before search, record reason in the stage report.
+
+## Replanning Policy
+
+Trigger replan when:
+
+1. Major assumption fails.
+2. Repeated attempts show no improvement.
+3. New evidence changes route significantly.
+4. Resource/risk profile changes.
+
+Mode controls whether replan confirmation is required.
+
+## Stage Reporting Policy
+
+At each stage completion or major todo completion:
+
+1. Save stage report under `<codex-cwd>/logs/runs/<run_id>/reports/`.
+2. Update `reports/index.md` with status and timestamp.
+3. In chat, provide a detailed summary plus report path.
+4. Do not block execution only because a stage report was emitted.
+
+## Shared Memory Export Gate
+
+Do not export shared memory during core task execution.
+
+1. Complete the primary task first.
+2. Treat shared export as a post-task phase.
+3. Require `human-checkpoint` before publishing shared memory.
 
 ## Decision Policy
-Use this decision order:
-1. `done`: success criteria satisfied with evidence.
-2. `checkpoint`: high-cost, high-impact, or high-risk action requires human confirmation.
-3. `iterate`: another low-cost step is available.
-4. `blocked`: no reliable next step; request targeted human input.
+
+Use this order:
+
+1. `done`: success criteria met with evidence.
+2. `checkpoint`: decision requires mode-based confirmation or safety gating.
+3. `iterate`: validated small next step exists.
+4. `replan`: current route is weak or stale.
+5. `blocked`: hard blocker requires user input.
 
 ## Evidence Standard
-Treat claims as valid only when backed by one of:
+
+Treat conclusions as valid only when backed by one or more:
+
 1. Reproducible command output.
-2. Measurable metric change.
-3. File diff linked to behavior change.
-4. Cross-check against prior memory with matching context.
+2. Measurable metric movement.
+3. File diff tied to behavior change.
+4. Corroborated external source.
 
 ## Required Cycle Output
-Emit this structure at the end of each cycle:
-1. `State`: what is currently true.
-2. `Evidence`: what was observed.
-3. `Next Step`: smallest validated action.
-4. `Memory Need`: none, retrieve, or writeback.
-5. `Checkpoint Need`: yes or no, with reason.
-6. `Shared Candidate`: yes or no, with why.
+
+At end of each cycle, emit:
+
+1. `Run`: run_id, mode, current stage.
+2. `State`: what is true now.
+3. `Evidence`: key observations.
+4. `Todo`: active/done/blocked highlights.
+5. `Next Step`: smallest safe action.
+6. `Replan Need`: yes or no, with reason.
+7. `Checkpoint Need`: yes or no, with reason.
+8. `Report Path`: stage report path or pending path.

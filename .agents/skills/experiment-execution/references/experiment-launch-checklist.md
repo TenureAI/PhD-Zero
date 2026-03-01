@@ -1,58 +1,45 @@
 # Experiment Launch Checklist
 
-Use this checklist before any real experiment launch.
+Use before real launches. Keep it minimal and mode-aware.
 
-Keep it short by default. Do not ask every item unless the run actually requires it.
+## Required First Checks
 
-## Default Checks
+1. repo/project path
+2. single-node vs multi-node
+3. proxy needed?
+4. tracker/login dependency?
+5. active `run_id` and output path `<project-root>/runs/<run_id>`
 
-Start with these first:
+## Conditional Checks
 
-1. Which codebase or repo are we using?
-2. Is this single-node or multi-node?
-3. Does the environment need a proxy?
-4. Does logging or access depend on a specific system such as WandB, 1DP Login, or another platform key?
+### Multi-node
 
-If these four are clear, continue execution and ask deeper questions only when needed.
+- master host and port
+- worker discovery source
+- launcher type
 
-## Conditional Follow-Ups
+### Proxy required
 
-### If Multi-Node
+- proxy setup path/value
+- worker-node applicability
 
-- master host
-- master port
-- world size or worker count
-- how to discover other nodes
+### External tracker/login
 
-### If Proxy Is Required
+- platform
+- project/workspace name
+- credential availability
 
-- proxy address or approved setup path
-- whether worker nodes need the same proxy
-- whether package downloads or tracker sync depend on it
+## Smoke Rule
 
-### If Logging Or Login Uses An External System
-
-- platform name
-- project or workspace name if applicable
-- whether the required key or login is already available
-- any run naming rule if the platform requires it
-
-## Minimal Safe Validation
-
-Before the full launch, do the smallest useful check:
-
-1. connectivity check if remote
-2. environment check if activation is required
-3. one-step smoke run if the experiment is expensive
+Run smoke only when information is incomplete or environment readiness is uncertain.
 
 ## Launch Record
 
-Record these after launch:
+Record:
 
 - exact launch command
-- codebase used
-- single-node or multi-node
-- whether proxy was enabled
-- session name or scheduler job ID if relevant
-- tracker or login run ID if relevant
-- primary log path
+- run_id and output path
+- node mode and assignment
+- proxy state
+- tracker run id (if any)
+- primary logs path

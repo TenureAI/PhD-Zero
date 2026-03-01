@@ -3,15 +3,20 @@
 This workspace is for AI research and development tasks (reproduction, debugging, evaluation, training, and experiment planning).
 
 ## Default Operating Rules
-1. Use `research-workflow` as the default execution loop for all non-trivial tasks.
-2. Use `memory-manager` for memory retrieval, writeback, promotion, and shared export candidates.
-3. Trigger `human-checkpoint` before high-cost, high-impact, or high-risk actions.
-4. Base conclusions on evidence only (command outputs, metrics, logs, and file diffs).
-5. Prefer small, reversible, verifiable steps over broad speculative changes.
-6. Follow `REPO_CONVENTIONS.md` for artifact placement and commit hygiene.
+1. Start each non-trivial research task with `run-governor` to select mode and initialize `run_id` paths.
+2. Use `research-workflow` as the default orchestration loop.
+3. Use `memory-manager` to maintain working todo state and long-term memory.
+4. Trigger `human-checkpoint` using mode-aware policy, always for major safety risks and shared-memory publication.
+5. Use `experiment-execution` only for actual run execution.
+6. Use `deep-research` for deep external investigation and evidence synthesis.
+7. Base conclusions on evidence only (command outputs, metrics, logs, and file diffs).
+8. Prefer small, reversible, verifiable steps over broad speculative changes.
+9. Follow `REPO_CONVENTIONS.md` for artifact placement and commit hygiene.
 
 ## Skill Paths
+- `.agents/skills/run-governor`
 - `.agents/skills/research-workflow`
 - `.agents/skills/memory-manager`
 - `.agents/skills/human-checkpoint`
 - `.agents/skills/experiment-execution`
+- `.agents/skills/deep-research`

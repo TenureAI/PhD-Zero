@@ -1,34 +1,36 @@
-# Memory Layout (v0)
+# Memory Layout (v1)
 
-Use this directory layout in a workspace:
+Use this layout during research execution:
 
 ```text
-workspace/
-  AGENTS.md
-  config/
-    persona.yaml
-  .agent/
-    memory.db
-    runs/
-      run_<id>/
-        working_state.json
-        action_log.jsonl
-        observations.jsonl
-  memory/
-    episodes/
-      2026/
-    procedures/
-      draft/
-      active/
-      deprecated/
-    insights/
-      draft/
-      active/
-      deprecated/
-  shared_export/
+<codex-cwd>/logs/runs/<run_id>/
+  working/
+    state.yaml
+    todo.yaml
+  reports/
+    index.md
+    stage-*.md
+
+<project-root>/runs/<run_id>/
+  logs/
+  checkpoints/
+  artifacts/
+
+memory/
+  episodes/
+  procedures/
+    draft/
+    active/
+    deprecated/
+  insights/
+    draft/
+    active/
+    deprecated/
+
+.agent/
+  memory.db
 ```
 
-## Notes
-1. Store narrative memory records as markdown with frontmatter.
-2. Store indexing and lifecycle state in SQLite (`.agent/memory.db`).
-3. Keep run-scoped logs under `.agent/runs/` and do not export them directly.
+Notes:
+1. Keep working state and reports run-scoped.
+2. Keep long-term memory in `memory/` plus index metadata in `.agent/memory.db`.

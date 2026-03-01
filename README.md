@@ -4,19 +4,16 @@
 
 当前 skills：
 
+- `run-governor`
 - `research-workflow`
 - `memory-manager`
 - `human-checkpoint`
 - `experiment-execution`
+- `deep-research`
 
 ## 目录约定
 
-真实内容只保留一份，统一放在 `.agents/skills/`：
-
-- `.agents/skills/research-workflow/`
-- `.agents/skills/memory-manager/`
-- `.agents/skills/human-checkpoint/`
-- `.agents/skills/experiment-execution/`
+真实内容只保留一份，统一放在 `.agents/skills/`。
 
 每个 skill 目录下包含：
 
@@ -35,6 +32,11 @@
 - 不维护第二份拷贝
 - 不做内容转换
 
+## Run 路径约定（执行时）
+
+- 控制日志与阶段报告：`<codex-cwd>/logs/runs/<run_id>/`
+- 项目实验产物：`<project-root>/runs/<run_id>/`
+
 ## AGENTS.md 的作用
 
 `AGENTS.md` 负责项目级指令和行为规范，不负责 skill 的物理存放。
@@ -45,13 +47,14 @@
 
 ## CI
 
-仓库内的 CI 只检查一件事：
+仓库 CI 检查：
 
-- `.agents/skills` 和 `.claude/skills` 下的软链接都存在，并且都能解析到有效的 `SKILL.md`
+- `.agents/skills` 和 `.claude/skills` 的 skill 名称集合一致
+- 每个 skill 都有可解析的 `SKILL.md`
 
 ## 快速检查
 
 ```bash
-find .agents/skills -mindepth 1 -maxdepth 1 -type l
+find .agents/skills -mindepth 1 -maxdepth 1 -type d
 find .claude/skills -mindepth 1 -maxdepth 1 -type l
 ```

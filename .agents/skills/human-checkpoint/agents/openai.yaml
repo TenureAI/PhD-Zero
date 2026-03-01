@@ -1,4 +1,4 @@
 interface:
   display_name: "Human Checkpoint"
-  short_description: "Escalate risky decisions with clear options."
-  default_prompt: "Use human checkpoint when a decision requires user confirmation, especially for risky or expensive actions."
+  short_description: "Mode-aware escalation for major risk and key approvals."
+  default_prompt: "Use human checkpoint for major safety risks, required plan/resource approvals by mode, and shared-memory publication decisions."

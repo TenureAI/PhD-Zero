@@ -1,120 +1,132 @@
 ---
 name: memory-manager
-description: Manage long-term AI R&D memory through retrieval, controlled writeback, promotion, and shared export candidates. Use when a task needs prior similar cases, run-state persistence, lessons learned, SOP extraction, cross-task insight consolidation, or publishing to open-research-memory. Trigger when requests mention memory, episodes, procedures, insights, run logs, memory_manager, experience reuse, or open-research-memory sharing.
+description: Manage long-term AI R&D memory with retrieval, writeback, promotion, and shared export candidates. Use when preserving run state, maintaining working todo lists, reusing prior debugging/research knowledge, recording outcomes, or preparing post-task shared-memory publication.
 ---
 
 # Memory Manager
 
 ## Mission
-Build compounding capability by turning execution traces into reusable memory.
+
+Build compounding capability by turning execution traces into reusable, evidence-linked memory.
 
 ## Load References
-Load these files before writing or promoting memory records:
+
+Load these files before writing or promoting records:
+
 1. `references/memory-layout.md`
 2. `references/memory-templates.md`
 3. `references/sqlite-schema.sql`
 
 ## Memory Types
+
 Manage these layers:
-1. `working`: run-scoped volatile state and action logs.
-2. `episode`: concrete case records with context, attempts, outcomes, and evidence.
-3. `procedure`: reusable SOP extracted from repeated successful episodes.
-4. `insight`: cross-task abstractions with scope, boundaries, and confidence.
-5. `persona`: behavior config only; do not mix with empirical memory.
+
+1. `working`: run-scoped current state and todo tracking.
+2. `episode`: concrete run case record.
+3. `procedure`: reusable SOP from repeated success.
+4. `insight`: cross-task abstraction with boundaries.
+5. `persona`: behavior config only.
+
+## Working Memory Contract
+
+`working` must include:
+
+1. `goal`
+2. `stage`
+3. `hypothesis`
+4. `last_action`
+5. `last_observation`
+6. `next_step`
+7. `blockers`
+8. `evidence_refs`
+9. `todo_active`
+10. `todo_done`
+11. `todo_blocked`
+
+Todo granularity should be task-level (small stages/subtasks), not command-level.
 
 ## Retrieval Policy
-Retrieve aggressively and early:
-1. Query by `project`, `task_type`, and `error_signature` first.
-2. Add `tags` and full-text matching when exact filters miss.
-3. Return top candidates with relevance reason and applicability boundary.
-4. Prefer `active` procedure and insight over draft when confidence is comparable.
-5. Flag stale entries when `last_used_at` is old and confidence is low.
+
+Retrieve early when useful, but do not block execution:
+
+1. Query by `project`, `task_type`, `error_signature` first.
+2. Add tags and FTS when exact filters miss.
+3. Prefer `active` procedures/insights when confidence is similar.
+4. Flag stale entries with low confidence.
+5. If retrieval is low-yield and task is time-sensitive, continue with search/deep research directly.
 
 ## Writeback Policy
-Write conservatively:
-1. Update `working` after each major state transition.
-2. Write an `episode` at milestone completion, major failure, route pivot, or human intervention.
-3. Draft a `procedure` only after repeated successful pattern (target: 2-3 episodes).
-4. Draft an `insight` only after cross-task recurring pattern with evidence links.
-5. Store evidence pointers, not only narrative summaries.
+
+Write conservatively and continuously:
+
+1. Update `working` on each meaningful state transition.
+2. Write `episode` at milestones, major failure, replan, or human intervention.
+3. Create `procedure` draft after repeated successful pattern.
+4. Create `insight` draft after cross-task recurring evidence.
+5. Store evidence pointers, not narrative only.
+
+## Error-Resolution Memory
+
+For significant errors, capture:
+
+1. `error_signature`
+2. reproduction condition
+3. attempted fixes
+4. observed outcomes
+5. final fix (if any)
+6. unresolved hypotheses
 
 ## Working Freshness Rules
-Treat stale `working` state as an execution risk:
-1. Refresh `working` after every plan change, tool call batch, or error diagnosis result.
-2. Run a periodic `working` review at least every 15 minutes during active runs.
-3. Force a `working` review before long training, expensive actions, or human checkpoints.
-4. Force a `working` review after any unexpected failure or interruption.
-5. If `working` is stale or inconsistent, pause new actions until it is repaired.
 
-## Working Review Checklist
-Validate these fields on each review:
-1. `goal`: current run objective is still valid.
-2. `hypothesis`: active assumption and its confidence.
-3. `last_action` and `last_observation`: latest action-evidence pair is complete.
-4. `next_step`: smallest executable step is unambiguous.
-5. `blockers`: active blockers and owner (agent or human).
-6. `evidence_refs`: links to logs, files, metrics, and command outputs.
+Treat stale working state as risk:
+
+1. Refresh after plan changes, tool-call batches, or diagnosis updates.
+2. Review at least every 15 minutes in active execution.
+3. Force review before high-resource actions.
+4. Force review after interruptions or unexpected failures.
 
 ## Recovery on Context Drift
-If the run appears confused or repetitive:
-1. Rebuild `working` from `action_log.jsonl` and `observations.jsonl`.
-2. Re-run targeted retrieval with `project`, `task_type`, and `error_signature`.
-3. Re-issue a compact state summary before continuing execution.
+
+If execution becomes repetitive or confused:
+
+1. Rebuild working state from action and observation logs.
+2. Run targeted retrieval by project/task/error signature.
+3. Publish compact state summary before continuing.
 
 ## Promotion Policy
-Promote strictly:
-1. `procedure draft -> active` only after successful reuse and stable boundary conditions.
-2. `insight draft -> active` only after multi-episode support and no unresolved contradictions.
-3. Require human review for safety-critical, expensive, or shared-memory-bound items.
-4. Deprecate entries when new evidence conflicts and confidence drops.
+
+Promote only with evidence:
+
+1. `procedure draft -> active` after successful reuse and stable boundaries.
+2. `insight draft -> active` after multi-episode support.
+3. Require human review for safety-critical or expensive procedures.
+4. Deprecate entries when contradictions accumulate.
 
 ## Shared Export Policy
-Export only high-value items:
-1. `verified` episodes with transferable lessons.
-2. `active` procedures with clear prerequisites.
-3. `active` insights with explicit evidence links and failure boundaries.
-4. Never export `working` state or noisy drafts.
+
+Treat shared export as post-task work:
+
+1. Do not export during main task execution.
+2. Export only verified/high-value records.
+3. Never export noisy `working` state.
+4. Require `human-checkpoint` before publishing.
 
 ## Shared Repository Contract
-When exporting shared memory:
-1. Target repository: `https://github.com/recursive-forge/open-research-memory`.
-2. Default local clone path: `<workspace>/open-research-memory`.
-3. Use pull-based flow only: local export -> branch (`codex/*`) -> PR -> review -> merge.
-4. Do not push directly to `main`.
-5. Read and follow the canonical docs in that repository: `README.md`, `CONTRIBUTING.md`, `schemas/`, `templates/`, and `.github/pull_request_template.md`.
-6. Enforce schema compatibility and required sections (`Context`, `Reproduce`, `Evidence`, `Failure Boundary`).
-7. Include reproducibility details and evidence pointers so other contributors can reuse safely.
-8. Trigger `human-checkpoint` before publishing shared exports when confidence is low or impact is high.
 
-## Shared Publish Steps
-When a record is ready for sharing:
-1. Export candidate files into `shared_export/` in the local project.
-2. Copy or transform candidates into the correct folders under `open-research-memory/`.
-3. Run repository validation (`python3 scripts/validate_records.py`).
-4. Commit on a `codex/*` branch with clear record scope.
-5. Open PR and request review; merge only after checks pass.
+When exporting:
 
-## Shared Memory Consumption
-When `open-research-memory` is already cloned locally, use it as an external evidence source:
-1. Pull latest changes from the shared repository before retrieval.
-2. Search shared records by `type`, `status`, `tags`, `task_type`, and error pattern.
-3. Prioritize `active`, `verified`, and `trusted` records; treat `draft` as weak hints.
-4. Validate applicability boundary and failure boundary before reuse.
-5. Convert selected shared records into local candidate context, not immediate truth.
-6. After applying a shared record, log outcome in local `episode` and update confidence.
-7. If reuse repeatedly succeeds, promote to local `procedure` or `insight` with shared-source links.
-8. If shared guidance fails, record counterexample and avoid repeating blindly.
-
-## Shared-to-Local Linking Rule
-For every reused shared record:
-1. Store source repository path and commit hash in local evidence refs.
-2. Link local `episode/procedure/insight` back to the shared record id.
-3. Keep local overrides explicit when local environment differs.
+1. Target `https://github.com/recursive-forge/open-research-memory`.
+2. Use pull-based flow: local export -> `codex/*` branch -> PR -> review -> merge.
+3. Never push directly to `main`.
+4. Enforce schema and required sections.
 
 ## Required Operation Output
-Output this structure for every memory operation:
-1. `Action`: retrieve, write, promote, deprecate, or export.
-2. `Target`: memory id or new record type.
-3. `Rationale`: why this action is justified.
-4. `Evidence`: supporting logs, metrics, files, or run IDs.
-5. `Result`: created, updated, skipped, blocked, or needs checkpoint.
+
+For each memory operation, emit:
+
+1. `Run`
+2. `Action` (retrieve/write/promote/deprecate/export)
+3. `Target`
+4. `Rationale`
+5. `Evidence`
+6. `Result`

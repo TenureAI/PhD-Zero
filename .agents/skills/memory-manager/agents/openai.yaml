@@ -1,4 +1,4 @@
 interface:
   display_name: "Memory Manager"
-  short_description: "Retrieve, write, promote, and export structured research memory."
-  default_prompt: "Use memory manager to search, write, promote, and govern memory records for AI R&D work."
+  short_description: "Maintain working todo memory and reusable research records."
+  default_prompt: "Use memory manager to keep working state fresh, track active/done/blocked todos, and write evidence-linked episode/procedure/insight records."
