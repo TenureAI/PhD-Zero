@@ -1,0 +1,4 @@
+interface:
+  display_name: "Experiment Execution"
+  short_description: "Run local or remote experiments with explicit environment, logging, and node controls."
+  default_prompt: "Use experiment execution to validate environment setup, choose the right remote-control path, launch experiments safely, and capture logs and node assignments."
