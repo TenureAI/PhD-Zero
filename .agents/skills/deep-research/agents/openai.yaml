@@ -1,4 +1,4 @@
 interface:
   display_name: "Deep Research"
-  short_description: "Flexible deep research across idea, debug, design, and strategy tasks."
-  default_prompt: "Use deep research to perform rigorous, citation-backed investigation with adaptive templates by research type and saved reports under the run logs path."
+  short_description: "Auditable deep research with mandatory key-work deep dives for paper-centric tasks."
+  default_prompt: "Use deep research to produce evidence-first reports with staged time-window search, contradiction checks, and detailed key-work analysis when the topic is research/paper centric."
