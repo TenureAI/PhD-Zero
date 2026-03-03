@@ -1,6 +1,6 @@
 ---
 name: deep-research
-description: Conduct deep, evidence-first research for complex questions using broad discovery, verification, contradiction checks, and traceable citations. Use for idea exploration, debugging investigations, design decisions, implementation strategy, and conflict resolution. Adapt the report template by research type while keeping rigorous sourcing and depth.
+description: Conduct deep, evidence-first research for complex questions using broad discovery, verification, contradiction checks, and traceable citations. Use for early-stage project scoping when a user wants to write a research study or paper on a topic, and for idea exploration, debugging investigations, design decisions, implementation strategy, and conflict resolution. Adapt the report template by research type while keeping rigorous sourcing and depth.
 ---
 
 # Deep Research
