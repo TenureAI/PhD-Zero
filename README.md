@@ -10,6 +10,7 @@
 - `human-checkpoint`
 - `experiment-execution`
 - `deep-research`
+- `project-context`
 
 ## 目录约定
 
