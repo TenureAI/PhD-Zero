@@ -39,7 +39,15 @@ Operational or decision implications.
 - sources_opened=
 - pivots=
 - dropped_sources=
-- optional recency counters
+- query_budget_total=
+- query_budget_frontier=
+- query_budget_recent=
+- query_budget_mid_term=
+- query_budget_classic=
+- frontier_sources=
+- recent_sources=
+- mid_term_sources=
+- classic_sources=
 
 ## Conclusion and Next Step
 

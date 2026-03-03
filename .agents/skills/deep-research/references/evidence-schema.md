@@ -14,6 +14,8 @@ Use claim-level evidence records during deep research. Keep structure flexible b
   "source_tier": "tier1|tier2|tier3",
   "research_type": "idea-exploration|debug-investigation|design-decision|implementation-strategy|conflict-resolution",
   "published_date": "YYYY-MM-DD or unknown",
+  "time_stage": "frontier|recent|mid-term|classic|unknown",
+  "days_from_as_of": "integer or unknown",
   "accessed_date": "YYYY-MM-DD",
   "credibility_notes": "reliability and limits",
   "benchmark_name": "optional",
