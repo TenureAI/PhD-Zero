@@ -15,14 +15,15 @@ For non-trivial tasks, run this order:
 
 1. Initialize run policy with `run-governor`.
 2. Understand user objective and current code/evidence state.
-3. Clarify ambiguous requirements (frequency depends on mode).
-4. Run deep research when needed.
-5. Build an execution plan.
-6. Confirm plan as required by mode.
-7. Execute with working-memory todo tracking.
-8. Replan on major issues when needed.
-9. Emit stage reports and maintain report index.
-10. Close task, then optionally publish shared memory.
+3. Clarify ambiguous requirements through `human-checkpoint`.
+4. Complete intake checkpoint before planning or decomposition.
+5. Run deep research when needed.
+6. Build an execution plan.
+7. Confirm plan as required by mode.
+8. Execute with working-memory todo tracking.
+9. Replan on major issues when needed.
+10. Emit stage reports and maintain report index.
+11. Close task, then optionally publish shared memory.
 
 ## Mode-Aware Interaction Policy
 
@@ -39,6 +40,15 @@ Follow run mode from `run-governor`:
    - Ask before high-resource actions.
 
 If user explicitly asks to switch mode, switch immediately.
+
+## User Interaction Routing Policy
+
+Route required user interactions through `human-checkpoint`:
+
+1. In `moderate` or `detailed`, prefer built-in user-question tool (`request_user_input`).
+2. If built-in tool is unavailable, degrade to concise plain-text questions.
+3. Apply this routing to intake clarification, plan confirmation, replan confirmation, and parameter approvals.
+4. Log channel choice as `interaction_channel=request_user_input|plain-text-fallback` and include `fallback_reason` when used.
 
 ## Default Execution Loop
 
@@ -59,12 +69,14 @@ Use these in combination:
 
 1. Treat memory as an optional accelerator, not a hard prerequisite.
 2. Use search/deep research directly when topic is time-sensitive, new, or currently blocked.
-3. For unknown errors, use this branch:
+3. For open-ended research/scoping requests, run deep research before giving decomposition or roadmap recommendations.
+4. For unknown errors, use this branch:
    - local evidence triage (logs, stack trace, recent changes)
    - targeted search
    - deep research (debug-investigation) if still unresolved
    - minimal fix validation
-4. If skipping memory before search, record reason in the stage report.
+5. If skipping memory before search, record reason in the stage report.
+6. If intake information is missing, trigger `human-checkpoint` before deep research or planning.
 
 ## Replanning Policy
 
@@ -125,3 +137,12 @@ At end of each cycle, emit:
 6. `Replan Need`: yes or no, with reason.
 7. `Checkpoint Need`: yes or no, with reason.
 8. `Report Path`: stage report path or pending path.
+9. `Interaction Channel`: `request_user_input|plain-text-fallback|none`.
+
+## Violation Recovery Policy
+
+If user interaction was handled outside required routing in non-`full-auto` modes:
+
+1. Acknowledge non-compliance.
+2. Re-run the missed checkpoint using `human-checkpoint` and channel policy.
+3. Re-evaluate downstream conclusions that depended on the missed checkpoint.

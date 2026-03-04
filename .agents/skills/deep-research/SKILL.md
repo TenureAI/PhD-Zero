@@ -21,18 +21,30 @@ Choose a primary `research_type` early:
 
 If templates do not fit exactly, adapt structure freely but keep depth, verification, and citations.
 
+## Intake Checkpoint Gate (Mandatory Before Search)
+
+Before selecting mode or running any WebSearch queries:
+
+1. Confirm `intake_checkpoint_complete=YES`.
+2. Intake must at least define: objective/scope, constraints, and expected deliverable format.
+3. Route missing-information requests through `human-checkpoint`.
+4. In `moderate` or `detailed`, prefer built-in user-question tool (`request_user_input`).
+5. If built-in tool is unavailable, degrade to concise plain-text questions.
+6. If intake is incomplete, remain in clarification phase and do not run search, decomposition, or synthesis.
+
 ## Default Workflow
 
 Iterate until evidence quality is sufficient:
 
-1. Restate objective and success criteria.
-2. Set explicit `As of: YYYY-MM-DD`.
-3. Run staged time-window search with Codex WebSearch.
-4. Extract claim-level evidence.
-5. Build key-work cards when the topic is paper-centric.
-6. Verify high-impact claims independently.
-7. Run contradiction/counter-evidence checks.
-8. Synthesize and produce final report.
+1. Confirm intake checkpoint is complete.
+2. Restate objective and success criteria.
+3. Set explicit `As of: YYYY-MM-DD`.
+4. Run staged time-window search with Codex WebSearch.
+5. Extract claim-level evidence.
+6. Build key-work cards when the topic is paper-centric.
+7. Verify high-impact claims independently.
+8. Run contradiction/counter-evidence checks.
+9. Synthesize and produce final report.
 
 ## Completion Gate (Mandatory)
 
@@ -40,16 +52,18 @@ Do not output final conclusions until all gate checks pass.
 
 Before synthesis, print:
 
-1. `selected_mode=quick|default-auditable|deep`
-2. `mode_reason=`
-3. `total_queries=`
-4. `bleeding_edge_queries=`
-5. `frontier_queries=`
-6. `recent_queries=`
-7. `mid_term_queries=`
-8. `classic_queries=`
-9. `degrade_used=YES|NO`
-10. `gate_pass=YES|NO`
+1. `intake_checkpoint_complete=YES|NO`
+2. `intake_channel=request_user_input|plain-text-fallback|none`
+3. `selected_mode=quick|default-auditable|deep`
+4. `mode_reason=`
+5. `total_queries=`
+6. `bleeding_edge_queries=`
+7. `frontier_queries=`
+8. `recent_queries=`
+9. `mid_term_queries=`
+10. `classic_queries=`
+11. `degrade_used=YES|NO`
+12. `gate_pass=YES|NO`
 
 If `degrade_used=YES`, also print:
 
@@ -305,15 +319,16 @@ Finalize only when:
 Include at minimum:
 
 1. As-of Date and Scope
-2. Gate Check
-3. Executive Synthesis
-4. Comprehensive Analysis
-5. Key Works Deep Dive (when paper-centric policy is triggered)
-6. Type-Specific Section(s)
-7. Research Trail Summary
-8. Conclusion and Next Step
-9. Saved Report Path and Save Status
-10. References
+2. Intake Checkpoint Status
+3. Gate Check
+4. Executive Synthesis
+5. Comprehensive Analysis
+6. Key Works Deep Dive (when paper-centric policy is triggered)
+7. Type-Specific Section(s)
+8. Research Trail Summary
+9. Conclusion and Next Step
+10. Saved Report Path and Save Status
+11. References
 
 Additionally include stage coverage counters:
 

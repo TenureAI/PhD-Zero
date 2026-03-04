@@ -11,12 +11,12 @@ Use this layout during research execution:
     index.md
     stage-*.md
 
-<project-root>/runs/<run_id>/
+<runtime_project_root>/runs/<run_id>/
   logs/
   checkpoints/
   artifacts/
 
-memory/
+<project-root>/.project_local/<project_slug>/memory/
   episodes/
   procedures/
     draft/
@@ -26,11 +26,10 @@ memory/
     draft/
     active/
     deprecated/
-
-.agent/
-  memory.db
+  index.db
 ```
 
 Notes:
 1. Keep working state and reports run-scoped.
-2. Keep long-term memory in `memory/` plus index metadata in `.agent/memory.db`.
+2. Keep long-term memory in `.project_local/<project_slug>/memory/` plus index metadata in `index.db`.
+3. Treat old `memory/` and `.agent/memory.db` layouts as legacy and migrate when touched.

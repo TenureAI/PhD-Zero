@@ -1,15 +1,19 @@
-# Project Context Schema (V1)
+# Project Context Schema (V2)
 
 Context is split into two JSON files under:
 
 - `<project-root>/.project_local/<project_slug>/context.json`
 - `<project-root>/.project_local/<project_slug>/secrets.json`
 
+This schema is for runtime context only. Heavy runtime artifacts stay under:
+
+- `<runtime_project_root>/runs/<run_id>/...`
+
 ## Non-sensitive (`context.json`)
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "project": {
     "slug": "vision-sft-v2",
     "name": "vision-sft-v2"
@@ -19,10 +23,14 @@ Context is split into two JSON files under:
     "username": "alice"
   },
   "execution": {
+    "execution_target": "remote",
+    "local_project_root": "/Users/alice/work/vision-sft-v2",
+    "runtime_project_root": "/data/projects/vision-sft-v2",
+    "runtime_output_root": "/data/projects/vision-sft-v2/runs",
+    "runtime_host": "train-gateway-01",
     "python_path": "/opt/conda/bin/python",
     "conda_env": "train",
-    "venv": "",
-    "workspace_root": "/data/projects/vision-sft-v2"
+    "venv": ""
   },
   "cluster": {
     "name": "h100-prod",
@@ -33,7 +41,7 @@ Context is split into two JSON files under:
   "tracking": {
     "run_notes": ""
   },
-  "updated_at": "2026-03-03T13:00:00Z"
+  "updated_at": "2026-03-04T09:00:00Z"
 }
 ```
 
@@ -41,7 +49,7 @@ Context is split into two JSON files under:
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "api": {
     "endpoint": "https://internal-gateway.example.com",
     "key": "<redacted>"
@@ -52,30 +60,40 @@ Context is split into two JSON files under:
   "auth": {
     "ssh_jump_host": "jump.internal"
   },
-  "updated_at": "2026-03-03T13:00:00Z"
+  "updated_at": "2026-03-04T09:00:00Z"
 }
 ```
 
 ## Task-Type Required Fields (Default)
 
+For all task types:
+
+- `execution.execution_target`
+- `execution.local_project_root`
+
+Task-specific additions:
+
 - `generic`: none
 - `report`:
   - `project.name`
-  - `execution.workspace_root`
 - `sft`:
+  - `execution.runtime_project_root`
   - `cluster.name`
   - `cluster.scheduler`
   - `cluster.queue`
-  - `execution.workspace_root`
 - `rl`:
+  - `execution.runtime_project_root`
   - `cluster.name`
   - `cluster.scheduler`
   - `cluster.queue`
   - `cluster.gpu_type`
-  - `execution.workspace_root`
 - `eval`:
+  - `execution.runtime_project_root`
   - `cluster.name`
-  - `execution.workspace_root`
+
+Conditional rule:
+
+- if `execution.execution_target=remote`, require `execution.runtime_host`
 
 You can append per-run requirements via CLI flags:
 
@@ -92,14 +110,25 @@ Snapshot payload:
 
 ```json
 {
-  "schema_version": 1,
-  "run_id": "20260303_130000-vision-sft-v2",
+  "schema_version": 2,
+  "run_id": "20260304_090000-vision-sft-v2",
   "task_type": "sft",
   "context": {"...": "..."},
   "secrets_redacted": {"...": "***"},
-  "created_at": "2026-03-03T13:00:00Z"
+  "created_at": "2026-03-04T09:00:00Z"
 }
 ```
+
+## Legacy Compatibility
+
+Legacy field:
+
+- `execution.workspace_root`
+
+When present, map to:
+
+- `execution.local_project_root`
+- `execution.runtime_project_root` (if missing)
 
 ## Legacy Layout Migration
 
@@ -110,5 +139,5 @@ Legacy path:
 Migrate to new layout:
 
 ```bash
-python .agents/skills/project-context/scripts/project_context.py migrate-layout --project-root . --clean-empty
+python3 .agents/skills/project-context/scripts/project_context.py migrate-layout --project-root . --clean-empty
 ```

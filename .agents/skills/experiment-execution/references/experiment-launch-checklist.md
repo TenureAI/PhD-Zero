@@ -4,13 +4,21 @@ Use before real launches. Keep it minimal and mode-aware.
 
 ## Required First Checks
 
-1. repo/project path
-2. single-node vs multi-node
-3. proxy needed?
-4. tracker/login dependency?
-5. active `run_id` and output path `<project-root>/runs/<run_id>`
+1. execution target (`local|remote`)
+2. local project root and runtime project root resolved
+3. if remote, confirm whether to reuse stored project-context remote profile
+4. single-node vs multi-node
+5. proxy needed?
+6. tracker/login dependency?
+7. active `run_id` and output path `<runtime_project_root>/runs/<run_id>`
 
 ## Conditional Checks
+
+### Remote target
+
+- runtime host reachable
+- runtime project root exists or can be created
+- remote profile reuse decision recorded
 
 ### Multi-node
 

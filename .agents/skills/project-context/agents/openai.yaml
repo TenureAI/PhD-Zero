@@ -2,4 +2,4 @@ version: 1
 agent:
   display_name: "Project Context"
   short_description: "Collect and persist per-project runtime context with private local storage and incremental preflight prompts."
-  default_prompt: "Use project-context to manage .project_local/<project_slug> context and secrets, collect only missing task-required fields, and snapshot run configuration safely."
+  default_prompt: "Use project-context to manage local/remote runtime context in .project_local/<project_slug>, reuse stored remote profiles when appropriate, and snapshot run configuration safely."

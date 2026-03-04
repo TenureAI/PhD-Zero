@@ -22,31 +22,45 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Tuple
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 TASK_REQUIRED_FIELDS = {
-    "generic": [],
-    "report": ["project.name", "execution.workspace_root"],
+    "generic": ["execution.execution_target", "execution.local_project_root"],
+    "report": ["project.name", "execution.execution_target", "execution.local_project_root"],
     "sft": [
         "cluster.name",
         "cluster.scheduler",
         "cluster.queue",
-        "execution.workspace_root",
+        "execution.execution_target",
+        "execution.local_project_root",
+        "execution.runtime_project_root",
     ],
     "rl": [
         "cluster.name",
         "cluster.scheduler",
         "cluster.queue",
         "cluster.gpu_type",
-        "execution.workspace_root",
+        "execution.execution_target",
+        "execution.local_project_root",
+        "execution.runtime_project_root",
     ],
-    "eval": ["cluster.name", "execution.workspace_root"],
+    "eval": [
+        "cluster.name",
+        "execution.execution_target",
+        "execution.local_project_root",
+        "execution.runtime_project_root",
+    ],
 }
 
 SECRET_DEFAULTS = ["api.endpoint", "api.key", "network.proxy", "auth.ssh_jump_host"]
 
 PROMPTS = {
     "project.name": "Project name",
+    "execution.execution_target": "Execution target (local/remote)",
+    "execution.local_project_root": "Local project root path",
+    "execution.runtime_project_root": "Runtime project root path",
+    "execution.runtime_output_root": "Runtime output root path",
+    "execution.runtime_host": "Runtime host",
     "execution.workspace_root": "Workspace root path",
     "cluster.name": "Cluster name",
     "cluster.scheduler": "Scheduler (e.g. slurm/k8s/ray/local)",
@@ -154,6 +168,26 @@ def ensure_private_layout(paths: ProjectPaths) -> None:
         os.chmod(directory, 0o700)
 
 
+def ensure_gitignore_rule(project_root: Path) -> bool:
+    gitignore = project_root / ".gitignore"
+    rule = ".project_local/"
+    existing = []
+    if gitignore.exists():
+        with gitignore.open("r", encoding="utf-8") as f:
+            existing = f.read().splitlines()
+    normalized = {line.strip() for line in existing}
+    if rule in normalized or ".project_local" in normalized:
+        return False
+
+    if existing and existing[-1].strip() != "":
+        existing.append("")
+    existing.append(rule)
+    payload = "\n".join(existing) + "\n"
+    with gitignore.open("w", encoding="utf-8") as f:
+        f.write(payload)
+    return True
+
+
 def cmd_output(parts: List[str]) -> str:
     if not shutil.which(parts[0]):
         return ""
@@ -162,6 +196,56 @@ def cmd_output(parts: List[str]) -> str:
     except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
         return ""
     return output.strip()
+
+
+def normalize_context_layout(context: Dict[str, Any], project_root: Path) -> List[str]:
+    updated: List[str] = []
+    resolved_root = str(project_root.resolve())
+
+    def set_if_missing(key: str, value: str) -> None:
+        if value in ("", None):
+            return
+        if nested_get(context, key) in (None, ""):
+            nested_set(context, key, value)
+            updated.append(key)
+
+    workspace_root = nested_get(context, "execution.workspace_root")
+    local_root = nested_get(context, "execution.local_project_root")
+    if workspace_root and (local_root in (None, "") or str(local_root) == resolved_root):
+        if str(local_root) != str(workspace_root):
+            nested_set(context, "execution.local_project_root", str(workspace_root))
+            updated.append("execution.local_project_root")
+
+    set_if_missing("execution.local_project_root", resolved_root)
+
+    target = nested_get(context, "execution.execution_target")
+    if isinstance(target, str):
+        normalized = target.strip().lower()
+        if normalized != target:
+            nested_set(context, "execution.execution_target", normalized)
+            updated.append("execution.execution_target")
+        target = normalized
+    if target not in {"local", "remote"}:
+        nested_set(context, "execution.execution_target", "local")
+        updated.append("execution.execution_target")
+
+    local_root = nested_get(context, "execution.local_project_root")
+    runtime_root = nested_get(context, "execution.runtime_project_root")
+    target = nested_get(context, "execution.execution_target")
+    if target == "local" and runtime_root in (None, "") and local_root not in (None, ""):
+        nested_set(context, "execution.runtime_project_root", str(local_root))
+        updated.append("execution.runtime_project_root")
+
+    local_root = nested_get(context, "execution.local_project_root")
+    set_if_missing("execution.workspace_root", str(local_root))
+
+    runtime_root = nested_get(context, "execution.runtime_project_root")
+    runtime_output_root = nested_get(context, "execution.runtime_output_root")
+    if runtime_root not in (None, "") and runtime_output_root in (None, ""):
+        nested_set(context, "execution.runtime_output_root", str(Path(str(runtime_root)) / "runs"))
+        updated.append("execution.runtime_output_root")
+
+    return updated
 
 
 def detect_context(project_slug: str, project_root: Path) -> Dict[str, Any]:
@@ -177,7 +261,7 @@ def detect_context(project_slug: str, project_root: Path) -> Dict[str, Any]:
         },
         "execution": {
             "python_path": sys.executable,
-            "workspace_root": str(project_root.resolve()),
+            "local_project_root": str(project_root.resolve()),
         },
     }
 
@@ -283,29 +367,41 @@ def apply_overrides(payload: Dict[str, Any], overrides: Dict[str, str]) -> List[
     return updated
 
 
+def conditional_required_fields(context: Dict[str, Any]) -> List[str]:
+    target = nested_get(context, "execution.execution_target")
+    if target == "remote":
+        return ["execution.runtime_project_root", "execution.runtime_host"]
+    return []
+
+
 def preflight(args: argparse.Namespace) -> int:
     project_root = Path(args.project_root).resolve()
     project_slug = args.project_slug or slugify(project_root.name)
     paths = ProjectPaths(root=project_root, slug=project_slug)
     ensure_private_layout(paths)
+    gitignore_updated = ensure_gitignore_rule(project_root)
 
     context = deep_merge(detect_context(project_slug, project_root), read_json(paths.context_path))
     secrets = deep_merge(detect_secrets(), read_json(paths.secrets_path))
-
-    required_context = list(TASK_REQUIRED_FIELDS[args.task_type]) + list(args.require)
-    required_secrets = list(args.require_secret)
-
-    # If the task appears remote/cluster heavy, keep default secret keys ready.
-    if args.task_type in {"sft", "rl", "eval"}:
-        for key in SECRET_DEFAULTS:
-            if key not in required_secrets:
-                required_secrets.append(key)
 
     context_overrides = parse_kv_pairs(args.set or [])
     secret_overrides = parse_kv_pairs(args.secret or [])
 
     updated_context = apply_overrides(context, context_overrides)
     updated_secrets = apply_overrides(secrets, secret_overrides)
+    updated_context.extend(normalize_context_layout(context, project_root))
+
+    required_context = list(TASK_REQUIRED_FIELDS[args.task_type]) + list(args.require)
+    for key in conditional_required_fields(context):
+        if key not in required_context:
+            required_context.append(key)
+
+    required_secrets = list(args.require_secret)
+    # If the task appears remote/cluster heavy, keep default secret keys ready.
+    if args.task_type in {"sft", "rl", "eval"}:
+        for key in SECRET_DEFAULTS:
+            if key not in required_secrets:
+                required_secrets.append(key)
 
     added_ctx, missing_ctx = collect_missing(
         context,
@@ -319,6 +415,7 @@ def preflight(args: argparse.Namespace) -> int:
         non_interactive=args.non_interactive,
         secret_mode=True,
     )
+    updated_context.extend(normalize_context_layout(context, project_root))
 
     context["schema_version"] = SCHEMA_VERSION
     context["updated_at"] = utc_now()
@@ -354,6 +451,7 @@ def preflight(args: argparse.Namespace) -> int:
                 "task_type": args.task_type,
                 "updated_context_fields": sorted(set(updated_context + added_ctx)),
                 "updated_secret_fields": sorted(set(updated_secrets + added_sec)),
+                "gitignore_updated": gitignore_updated,
             },
             ensure_ascii=True,
         )
@@ -365,6 +463,9 @@ def preflight(args: argparse.Namespace) -> int:
                 "context": str(paths.context_path),
                 "secrets": str(paths.secrets_path),
                 "snapshot": snapshot_path,
+                "local_project_root": str(nested_get(context, "execution.local_project_root") or ""),
+                "runtime_project_root": str(nested_get(context, "execution.runtime_project_root") or ""),
+                "runtime_output_root": str(nested_get(context, "execution.runtime_output_root") or ""),
             },
             ensure_ascii=True,
         )

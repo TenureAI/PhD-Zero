@@ -20,10 +20,12 @@ Read when needed:
 
 Collect minimum safe inputs:
 
-1. repo/project path
-2. single-node or multi-node
-3. proxy requirement
-4. tracker/login requirement
+1. execution target (`local|remote`)
+2. local project root
+3. runtime project root (required when remote)
+4. single-node or multi-node
+5. proxy requirement
+6. tracker/login requirement
 
 Ask only missing questions.
 
@@ -32,7 +34,10 @@ Ask only missing questions.
 Use shared run_id from run-governor:
 
 1. control logs and stage reports: `<codex-cwd>/logs/runs/<run_id>/`
-2. experiment outputs: `<project-root>/runs/<run_id>/`
+2. experiment outputs: `<runtime_project_root>/runs/<run_id>/`
+3. project-context snapshots and secrets: `<local_project_root>/.project_local/<project_slug>/`
+
+In local execution, `runtime_project_root` can be equal to `local_project_root`.
 
 ## Mode-Aware Interaction
 
@@ -76,7 +81,8 @@ Retry behavior should be mode-aware and evidence-driven.
 
 1. Choose control mode: direct SSH, SSH+session manager, scheduler, or existing remote agent.
 2. Declare remote model: remote-native or local-driver.
-3. Validate connectivity and runtime basics before expensive launch when uncertainty exists.
+3. If project-context has remote profile, confirm reuse policy before launch.
+4. Validate connectivity and runtime basics before expensive launch when uncertainty exists.
 
 ## Logging and Failure Handling
 
@@ -94,6 +100,7 @@ On failures, record owner and cleanup plan.
 Do not launch full run when required inputs are still unknown and not explicitly waived.
 
 In `full-auto`, continue only if risk is acceptable and no major safety issue exists.
+In `full-auto`, if remote profile is complete, reuse it by default unless explicitly overridden.
 
 ## Output Contract
 
@@ -104,8 +111,9 @@ run_id: <id>
 mode: <full-auto|moderate|detailed>
 execution_mode: <local|ssh|ssh+tmux|scheduler|remote-agent>
 remote_model: <remote-native|local-driver|n/a>
-repo_path: <path>
-output_path: <project-root>/runs/<run_id>
+local_project_root: <path>
+runtime_project_root: <path>
+output_path: <runtime_project_root>/runs/<run_id>
 environment:
   python: <path/version>
   env: <conda/venv/module>
