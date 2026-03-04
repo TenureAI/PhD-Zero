@@ -27,8 +27,56 @@ Additional rules:
 
 1. If the user explicitly asks to switch mode, switch immediately.
 2. If the user says "just do it" or equivalent, treat as a temporary switch to `full-auto` behavior.
-3. If mode selection is pending for 30+ minutes, default to `moderate`.
-4. After mode is selected, do not auto-continue after confirmation timeouts in non-`full-auto` modes.
+3. If mode selection is pending, keep the run in `pending-confirmation` and do not initialize run artifacts.
+4. Never auto-default mode from timeout. A mode must be explicitly confirmed by the user before initialization.
+5. After mode is selected, do not auto-continue after confirmation timeouts in non-`full-auto` modes.
+
+## Interaction Transport Policy
+
+For user confirmations required by run initialization:
+
+1. Route confirmation requests through `human-checkpoint`.
+2. In `moderate` or `detailed`, prefer built-in user-question tool (`request_user_input`).
+3. If built-in tool is unavailable, degrade to concise plain-text questions.
+4. Record the channel as `interaction_transport=request_user_input|plain-text-fallback`.
+
+## Execution Target Bootstrap
+
+During run initialization, decide execution target before planning launch steps:
+
+1. ask whether this run executes on `local` or `remote`
+2. if `remote`, load existing remote fields from `project-context`
+3. ask user whether to reuse stored remote fields for this run
+4. if not reused or incomplete, collect only missing remote-required fields
+5. persist the final decision and resolved paths into run manifest and project-context
+
+Remote-required fields:
+
+1. `execution.runtime_host`
+2. `execution.runtime_project_root`
+3. `cluster.scheduler` when scheduler-based launch is selected
+
+Mode rules:
+
+1. `full-auto`: if stored remote fields are complete, reuse by default; ask only on hard blockers.
+2. `moderate` and `detailed`: explicitly confirm reuse choice.
+
+## Mandatory Human Confirmation Gate
+
+Before creating any run files or directories, collect and confirm both fields from the user:
+
+1. `user_confirmed_mode` in `{full-auto|moderate|detailed}`
+2. `user_confirmed_execution_target` in `{local|remote}`
+
+Hard constraints:
+
+1. If either confirmation is missing, mark status `blocked-awaiting-user-confirmation`.
+2. While blocked, do not create `run_id`, run directories, manifests, policy files, working files, reports, or runtime snapshots.
+3. `moderate` is only a recommendation label and cannot be applied unless user-confirmed.
+4. For `moderate` or `detailed`, ask via built-in question tool first; if unavailable, use plain-text fallback.
+5. If user asks to proceed without specifying values, ask a direct clarification question and remain blocked.
+6. Confirmation collection must be mediated by `human-checkpoint`.
+7. Any assumption for mode/target is non-compliant, even when likely.
 
 ## Run Identity and Directories
 
@@ -36,14 +84,20 @@ Use one run identifier:
 
 - `run_id = <YYYYMMDD_HHMMSS>-<query-slug>`
 
+Prerequisite:
+
+1. `run_id` creation is allowed only after `user_confirmed_mode` and `user_confirmed_execution_target` are present.
+
 Create and maintain:
 
 1. Control logs and reports:
    - `<codex-cwd>/logs/runs/<run_id>/`
-2. Per-project execution outputs:
-   - `<project-root>/runs/<run_id>/`
+2. Runtime execution outputs:
+   - `<runtime_project_root>/runs/<run_id>/`
+3. Project context state:
+   - `<local_project_root>/.project_local/<project_slug>/`
 
-Do not mirror project artifacts back to Codex logs by default.
+Do not mirror heavy runtime artifacts back to local logs by default.
 
 ## Run Files
 
@@ -55,7 +109,11 @@ Maintain these files in `<codex-cwd>/logs/runs/<run_id>/`:
    - safety policy notes
    - per-run action allowances
 2. `run_manifest.yaml`
-   - primary project root
+   - local project root
+   - runtime project root
+   - runtime output root
+   - execution target (`local|remote`)
+   - runtime host (if remote)
    - optional additional project roots
    - output directory mapping
 3. `working/state.yaml`
@@ -112,5 +170,18 @@ For each run-governor action, emit:
 1. `Run`: run_id and active mode
 2. `Action`: initialize, switch-mode, update-policy, new-topic-check, or stage-report
 3. `Decision`: what was chosen and why
-4. `Paths`: affected control/output paths
-5. `Next`: next actionable step
+4. `Execution`: local/remote choice and reuse decision
+5. `Paths`: affected control/output/context paths
+6. `Next`: next actionable step
+7. `Confirmation`: `user_confirmed_mode`, `user_confirmed_execution_target`, and whether initialization is permitted (`YES|NO`)
+8. `Compliance`: `gate_status=pass|blocked`, with blocked reason when applicable
+9. `Interaction`: `interaction_transport` and optional `fallback_reason`
+
+## Violation Recovery Policy
+
+If initialization occurred before required confirmation:
+
+1. Immediately acknowledge non-compliance.
+2. Ask whether to keep or clean the created artifacts.
+3. Do not continue execution until user re-confirms `mode` and `execution_target`.
+4. Record the incident and recovery choice in the next stage report.
