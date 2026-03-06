@@ -1,6 +1,6 @@
 ---
 name: research-plan
-description: Build detailed, execution-ready research plans for CS projects, papers, and experiment proposals. Use when the user wants a research proposal, experiment roadmap, study design, ablation plan, or pre-implementation planning with explicit experiments, core research questions, innovation points, codebase requirements, files, datasets, risks, and expected outcomes.
+description: Build detailed, execution-ready research plans for CS projects, papers, and experiment proposals. Use when the user wants a research proposal, experiment roadmap, study design, ablation plan, or pre-implementation planning with explicit experiments, core research questions, innovation points, codebase requirements, files, data or workload requirements, risks, and expected outcomes.
 ---
 
 # Research Plan
@@ -40,8 +40,8 @@ Every final plan must include all sections below. Do not omit a section just bec
    - For each experiment: hypothesis, setup, variables, metrics, and success signal.
 5. `How To Do It`
    - `Code Base`: what kind of repository or framework is needed.
-   - `Related Files`: config, prompts, manifests, training scripts, eval scripts, data cards, annotation guides, checkpoint metadata, report templates, and logs.
-   - `Datasets`: required datasets, splits, licenses, collection method, cleaning, and augmentation if needed.
+   - `Related Files`: configs, manifests, experiment scripts, evaluation scripts, request templates when needed, documentation, metadata, report templates, and logs.
+   - `Data / Workloads / Inputs`: required datasets, workloads, traces, corpora, benchmarks, or input sources; plus split policy, access constraints, and preprocessing if needed.
 6. `Expected Results`
    - What outcomes are expected qualitatively and quantitatively.
    - What negative or null outcomes are still informative.
@@ -86,7 +86,7 @@ Each experiment block should specify:
 3. `Hypothesis`
 4. `Independent Variables`
 5. `Controlled Factors`
-6. `Datasets / Data Splits`
+6. `Data / Workloads / Evaluation Scope`
 7. `Metrics`
 8. `Implementation Notes`
 9. `Expected Outcome`
@@ -100,7 +100,7 @@ Use this experiment stack by default:
 3. `Ablations`
    - Remove or vary each key component one at a time.
 4. `Sensitivity`
-   - Check scale, parameter, workload, or data sensitivity.
+   - Check scale, configuration, workload, or data sensitivity.
 5. `Robustness`
    - Check domain shift, input perturbation, user variation, or annotation mismatch.
 6. `Error Analysis`
@@ -149,7 +149,7 @@ Always make this section operational.
 Specify:
 
 1. Main language and framework.
-2. Training and inference entry points.
+2. Experiment and execution entry points.
 3. Config system.
 4. Evaluation pipeline.
 5. Reproducibility requirements.
@@ -166,26 +166,26 @@ Mention the concrete file classes the repo should contain:
 
 1. `run_experiment.py` or stage-specific experiment scripts
 2. `eval.py` and metric wrappers
-3. dataset manifests and split files
-4. model configs
+3. data manifests, workload definitions, or split files
+4. system or experiment configs
 5. experiment configs or request templates if applicable
-6. inference scripts
+6. execution or evaluation scripts
 7. experiment registry or run sheet
 8. annotation instructions
 9. result summary tables
 10. failure case logs
 
-### Datasets
+### Data / Workloads / Inputs
 
 Always specify:
 
-1. Primary dataset
-2. Validation and test split policy
-3. External or robustness datasets
-4. Licensing or access constraints
-5. Data cleaning and filtering
+1. Primary data source, workload, benchmark, trace, or corpus
+2. Validation, comparison, or test scope
+3. External or robustness inputs
+4. Licensing, access, or collection constraints
+5. Preprocessing, filtering, or normalization
 
-If the user has not chosen datasets, propose candidates and explain tradeoffs.
+If the user has not chosen the evaluation inputs, propose candidates and explain tradeoffs.
 
 ### Additional Experiment Variants
 
@@ -193,9 +193,9 @@ If the plan needs broader coverage, specify extra experiment variants such as:
 
 1. domain shift or out-of-domain evaluation
 2. noisy or low-resource settings
-3. scale or hyperparameter sensitivity
+3. scale or configuration sensitivity
 4. user group or input-type variation
-5. inference-time cost or latency constraints
+5. execution-time cost or latency constraints
 
 ## Expected Results Rules
 
@@ -237,7 +237,7 @@ Before finalizing, check:
 1. Are the experiments concrete enough to run?
 2. Are the research points framed as questions?
 3. Are innovation claims defended against obvious baseline objections?
-4. Are codebase, files, and datasets all specified?
+4. Are codebase, files, and data or workload requirements all specified?
 5. Are expected results measurable?
 6. Are failure cases still informative?
 

@@ -29,7 +29,7 @@ Use this template when producing a detailed research plan.
 
 For each experiment, fill:
 
-| Experiment | Purpose | Hypothesis | Variables | Dataset / Split | Metrics | Expected Outcome |
+| Experiment | Purpose | Hypothesis | Variables | Data / Scope | Metrics | Expected Outcome |
 |---|---|---|---|---|---|---|
 | Baseline |  |  |  |  |  |  |
 | Main method |  |  |  |  |  |  |
@@ -44,29 +44,29 @@ For each experiment, fill:
 
 - Language / framework:
 - Existing repo to reuse:
-- Training entry points:
+- Experiment or execution entry points:
 - Evaluation entry points:
 - Config system:
 - Reproducibility notes:
 
 ### Related Files
 
-- Training scripts:
+- Experiment scripts:
 - Evaluation scripts:
-- Dataset manifests:
+- Data manifests / workload definitions:
 - Config files:
-- Inference scripts:
-- Prompt templates:
+- Execution / evaluation scripts:
+- Request templates if applicable:
 - Annotation guides:
 - Result tables / notebooks:
 
-### Datasets
+### Data / Workloads / Inputs
 
-- Primary dataset:
-- Validation / test split:
-- Robustness dataset:
+- Primary data source / workload / benchmark:
+- Validation / comparison scope:
+- Robustness input:
 - License / access:
-- Preprocessing:
+- Preprocessing / normalization:
 
 ### Additional Experiment Variants
 
