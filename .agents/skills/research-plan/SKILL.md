@@ -1,6 +1,6 @@
 ---
 name: research-plan
-description: Build detailed, execution-ready research plans for AI/ML projects, papers, and experiment proposals. Use when the user wants a research proposal, experiment roadmap, study design, ablation plan, or pre-implementation planning with explicit experiments, core research questions, innovation points, codebase requirements, files, datasets, risks, and expected outcomes.
+description: Build detailed, execution-ready research plans for CS projects, papers, and experiment proposals. Use when the user wants a research proposal, experiment roadmap, study design, ablation plan, or pre-implementation planning with explicit experiments, core research questions, innovation points, codebase requirements, files, datasets, risks, and expected outcomes.
 ---
 
 # Research Plan
@@ -17,7 +17,7 @@ Use this skill when the user asks for any of the following:
 2. A project plan before implementation.
 3. A paper idea breakdown into experiments.
 4. An ablation or evaluation roadmap.
-5. A study design for an AI/ML or general CS research project.
+5. A study design for a general CS research project.
 
 ## Non-Negotiable Output Sections
 
@@ -56,10 +56,10 @@ Follow this order unless the user explicitly asks for a lighter output:
 
 1. Restate the research objective in one sentence.
 2. Identify task type:
-   - `modeling`
-   - `data-centric`
+   - `algorithmic`
    - `systems`
-   - `human-in-the-loop`
+   - `data or benchmarking`
+   - `human-computer interaction`
    - `system-evaluation`
 3. Identify the primary unit of progress:
    - accuracy or quality gain
@@ -100,7 +100,7 @@ Use this experiment stack by default:
 3. `Ablations`
    - Remove or vary each key component one at a time.
 4. `Sensitivity`
-   - Check scale, hyperparameter, prompt, or data sensitivity.
+   - Check scale, parameter, workload, or data sensitivity.
 5. `Robustness`
    - Check domain shift, input perturbation, user variation, or annotation mismatch.
 6. `Error Analysis`
@@ -112,13 +112,13 @@ Research focus should be written as concrete questions, not generic themes.
 
 Good:
 
-1. "Does retrieval-augmented planning improve tool-use success on long-horizon tasks without increasing latency too much?"
-2. "Which component contributes most: task decomposition, memory retrieval, or verifier feedback?"
+1. "Does the proposed indexing strategy reduce query latency under high-concurrency workloads without hurting recall?"
+2. "Which component contributes most: cache policy, partitioning scheme, or request scheduling?"
 
 Weak:
 
-1. "Study agent planning."
-2. "Improve model performance."
+1. "Study system performance."
+2. "Improve performance."
 
 ## How To Write Innovation Points
 
@@ -156,19 +156,19 @@ Specify:
 
 Examples:
 
-1. `PyTorch + Hugging Face + Hydra` for training-heavy model work.
-2. `PyTorch Lightning` when multi-stage training orchestration matters.
+1. A language and framework already established in the target project.
+2. A reproducible config system for experiments and evaluation.
 3. An existing project-specific codebase when reproduction fidelity matters more than flexibility.
 
 ### Related Files
 
 Mention the concrete file classes the repo should contain:
 
-1. `train.py` or stage-specific training scripts
+1. `run_experiment.py` or stage-specific experiment scripts
 2. `eval.py` and metric wrappers
 3. dataset manifests and split files
 4. model configs
-5. prompt templates if LLMs are involved
+5. experiment configs or request templates if applicable
 6. inference scripts
 7. experiment registry or run sheet
 8. annotation instructions
@@ -211,7 +211,7 @@ Prefer ranges or decision thresholds over vague claims.
 
 Examples:
 
-1. "Expected 3-7% relative improvement on the primary success metric, with neutral or slightly improved performance on the stable benchmark split."
+1. "Expected 3-7% relative improvement on the primary success metric, with neutral or slightly improved performance on the stable reference workload."
 2. "A null result would suggest the proposed component adds complexity without improving the key bottleneck it was meant to address."
 
 ## Output Format

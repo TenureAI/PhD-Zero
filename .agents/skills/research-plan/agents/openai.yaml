@@ -1,4 +1,4 @@
 interface:
   display_name: "Research Plan"
   short_description: "Turn an early-stage idea into a concrete research plan with experiments, novelty, implementation details, datasets, and expected outcomes."
-  default_prompt: "Use research plan to draft a detailed AI/ML study plan with explicit experiment design, research questions, innovation points, codebase and file requirements, datasets, recording-condition variants, risks, and expected results."
+  default_prompt: "Use research plan to draft a detailed CS research plan with explicit experiment design, research questions, innovation points, codebase and file requirements, datasets, risks, and expected results."
