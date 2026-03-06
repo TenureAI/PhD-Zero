@@ -9,6 +9,33 @@ description: Build detailed, execution-ready research plans for CS projects, pap
 
 Turn an early-stage research idea into a concrete, execution-ready plan with clear experiments, implementation prerequisites, and expected results.
 
+## Interaction Policy
+
+Once the user has chosen a direction, stop asking frequent clarification questions unless a missing detail would materially change the plan.
+
+Default behavior after direction is fixed:
+
+1. Infer reasonable assumptions.
+2. Write the full detailed plan in one pass.
+3. Ask follow-up questions only for hard blockers or high-risk ambiguity.
+
+Do not turn normal planning into a back-and-forth questionnaire.
+
+## Delivery Policy
+
+Separate the full planning artifact from the chat summary.
+
+1. The full plan should still be detailed and complete.
+2. In the CLI chat, do not dump the entire long report unless the user explicitly asks for it.
+3. In the CLI chat, provide a concise summary focused on:
+   - key innovation points
+   - experiment plan
+   - code base and file requirements
+   - data or workload requirements
+   - expected results
+   - major risks
+4. Keep progress updates short while drafting.
+
 ## When To Use
 
 Use this skill when the user asks for any of the following:
@@ -229,6 +256,8 @@ By default, structure the final plan in this order:
 9. Deliverables
 
 Use tables when they make experiment plans easier to scan.
+
+When returning results to the user in chat, summarize the plan instead of pasting the full long-form document unless the user explicitly requests the full text.
 
 ## Required Quality Bar
 
