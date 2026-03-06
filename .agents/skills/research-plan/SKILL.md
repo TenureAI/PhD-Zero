@@ -17,7 +17,7 @@ Use this skill when the user asks for any of the following:
 2. A project plan before implementation.
 3. A paper idea breakdown into experiments.
 4. An ablation or evaluation roadmap.
-5. A study design for speech, audio, multimodal, or model training work.
+5. A study design for an AI/ML or general CS research project.
 
 ## Non-Negotiable Output Sections
 
@@ -58,8 +58,8 @@ Follow this order unless the user explicitly asks for a lighter output:
 2. Identify task type:
    - `modeling`
    - `data-centric`
-   - `speech-audio`
-   - `multimodal`
+   - `systems`
+   - `human-in-the-loop`
    - `system-evaluation`
 3. Identify the primary unit of progress:
    - accuracy or quality gain
@@ -102,7 +102,7 @@ Use this experiment stack by default:
 4. `Sensitivity`
    - Check scale, hyperparameter, prompt, or data sensitivity.
 5. `Robustness`
-   - Check noise, domain shift, speaker variation, or annotation mismatch.
+   - Check domain shift, input perturbation, user variation, or annotation mismatch.
 6. `Error Analysis`
    - Identify where the method fails and why.
 
@@ -112,12 +112,12 @@ Research focus should be written as concrete questions, not generic themes.
 
 Good:
 
-1. "Does retrieval-conditioned speaker adaptation improve low-resource emotional TTS without degrading intelligibility?"
-2. "Which component contributes most: speaker memory, style prompting, or acoustic augmentation?"
+1. "Does retrieval-augmented planning improve tool-use success on long-horizon tasks without increasing latency too much?"
+2. "Which component contributes most: task decomposition, memory retrieval, or verifier feedback?"
 
 Weak:
 
-1. "Study speaker adaptation."
+1. "Study agent planning."
 2. "Improve model performance."
 
 ## How To Write Innovation Points
@@ -158,7 +158,7 @@ Examples:
 
 1. `PyTorch + Hugging Face + Hydra` for training-heavy model work.
 2. `PyTorch Lightning` when multi-stage training orchestration matters.
-3. `fairseq` or an existing speech stack when reproduction fidelity matters more than flexibility.
+3. An existing project-specific codebase when reproduction fidelity matters more than flexibility.
 
 ### Related Files
 
@@ -211,8 +211,8 @@ Prefer ranges or decision thresholds over vague claims.
 
 Examples:
 
-1. "Expected 2-4% relative WER reduction on noisy speech and neutral performance on clean speech."
-2. "A null result would suggest the proposed memory module adds complexity without enough speaker information gain."
+1. "Expected 3-7% relative improvement on the primary success metric, with neutral or slightly improved performance on the stable benchmark split."
+2. "A null result would suggest the proposed component adds complexity without improving the key bottleneck it was meant to address."
 
 ## Output Format
 
