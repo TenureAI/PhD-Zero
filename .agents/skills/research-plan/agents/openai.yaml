@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Plan"
+  short_description: "Turn an early-stage idea into a concrete research plan with experiments, novelty, implementation details, data or workload requirements, and expected outcomes."
+  default_prompt: "Use research plan to draft a detailed CS research plan with explicit experiment design, research questions, innovation points, codebase and file requirements, data or workload requirements, risks, and expected results."
