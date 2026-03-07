@@ -1,6 +1,6 @@
 ---
 name: research-workflow
-description: Run a mode-aware, evidence-driven AI R&D workflow from intake to completion for research tasks such as code/paper analysis, debugging, reproduction, planning, and iterative delivery. Use when a non-trivial research task needs structured phases, stage reporting, replanning control, and integration with run-governor, memory-manager, deep-research, human-checkpoint, and experiment-execution.
+description: Run a mode-aware, evidence-driven AI R&D workflow from intake to completion for research tasks such as code/paper analysis, debugging, reproduction, planning, and iterative delivery. Use when a non-trivial research task needs structured phases, stage reporting, replanning control, and integration with run-governor, research-plan, memory-manager, deep-research, human-checkpoint, and experiment-execution.
 ---
 
 # Research Workflow
@@ -18,7 +18,7 @@ For non-trivial tasks, run this order:
 3. Clarify ambiguous requirements through `human-checkpoint`.
 4. Complete intake checkpoint before planning or decomposition.
 5. Run deep research when needed.
-6. Build an execution plan.
+6. Build an execution plan (use `research-plan` for planning-heavy requests).
 7. Confirm plan as required by mode.
 8. Execute with working-memory todo tracking.
 9. Replan on major issues when needed.
@@ -77,6 +77,7 @@ Use these in combination:
    - minimal fix validation
 5. If skipping memory before search, record reason in the stage report.
 6. If intake information is missing, trigger `human-checkpoint` before deep research or planning.
+7. If deep research was used for open-ended scoping, hand off to `research-plan` to convert findings into an execution-ready plan. Skip only if the user explicitly opts out.
 
 ## Replanning Policy
 
