@@ -46,6 +46,16 @@ Iterate until evidence quality is sufficient:
 8. Run contradiction/counter-evidence checks.
 9. Synthesize and produce final report.
 
+## Scoping-to-Planning Handoff Policy
+
+When deep research is used for open-ended scoping (`idea-exploration`), hand off findings to `research-plan` as the required default next step. Skip only if the user explicitly opts out.
+
+Handoff expectations:
+
+1. Preserve core hypotheses, constraints, and evidence-backed tradeoffs.
+2. Identify recommended direction and at least one fallback direction.
+3. Convert conclusions into executable planning inputs (experiments, implementation prerequisites, data/workload requirements, risks).
+
 ## Completion Gate (Mandatory)
 
 Do not output final conclusions until all gate checks pass.
