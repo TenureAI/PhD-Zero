@@ -131,6 +131,7 @@ At each stage completion or major todo completion:
 2. Update `reports/index.md` with status and timestamp.
 3. In chat, provide a detailed summary plus report path.
 4. Do not block execution only because a stage report was emitted.
+5. If the stage delivers data-analysis results, include visualization outputs and saved figure paths (default: `<codex-cwd>/logs/runs/<run_id>/reports/figures/`).
 
 ## Shared Memory Export Gate
 

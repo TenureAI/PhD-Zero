@@ -95,6 +95,16 @@ Record stable paths for:
 
 On failures, record owner and cleanup plan.
 
+## Data Analysis Visualization Policy
+
+When the deliverable includes data analysis results:
+
+1. run visualization analysis on the computed metrics/tables before final delivery
+2. save report-facing figures under `<codex-cwd>/logs/runs/<run_id>/reports/figures/`
+3. keep runtime-generated source figures under `<runtime_project_root>/runs/<run_id>/artifacts/figures/`
+4. include figure paths in stage reports and final summary
+5. prefer stable filenames such as `<topic>-<metric>.png` or `<topic>-<metric>.svg`
+
 ## Stop Conditions
 
 Do not launch full run when required inputs are still unknown and not explicitly waived.
@@ -127,6 +137,10 @@ node_plan:
 logs:
   stdout: <path>
   artifacts: <path>
+analysis_artifacts:
+  figures_report_root: <codex-cwd>/logs/runs/<run_id>/reports/figures
+  figures_runtime_root: <runtime_project_root>/runs/<run_id>/artifacts/figures
+  figures: <list of saved figure paths>
 next_action: <smallest safe step>
 checkpoint_needed: <yes|no>
 ```
