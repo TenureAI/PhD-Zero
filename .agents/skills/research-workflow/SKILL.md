@@ -15,17 +15,18 @@ For non-trivial tasks, run this order:
 
 1. Initialize run policy with `run-governor`.
 2. Resolve runtime context with `project-context` before experiment/report/eval execution.
-3. Understand user objective and current code/evidence state.
-4. Clarify ambiguous requirements through `human-checkpoint`.
-5. Complete intake checkpoint before planning or decomposition.
-6. Run one `memory-manager` bootstrap (`retrieve/init-working`).
-7. Run deep research when needed.
-8. Build an execution plan (use `research-plan` for planning-heavy requests).
-9. Confirm plan as required by mode.
-10. Execute with trigger-based working-memory updates.
-11. Replan on major issues when needed.
-12. Emit stage reports and maintain report index.
-13. Close task, write memory close-out, then optionally publish shared memory.
+3. Resolve shared-memory source config from `project-context` when shared retrieval or export may be needed.
+4. Understand user objective and current code/evidence state.
+5. Clarify ambiguous requirements through `human-checkpoint`.
+6. Complete intake checkpoint before planning or decomposition.
+7. Run one `memory-manager` bootstrap (`retrieve/init-working`).
+8. Run deep research when needed.
+9. Build an execution plan (use `research-plan` for planning-heavy requests).
+10. Confirm plan as required by mode.
+11. Execute with trigger-based working-memory updates.
+12. Replan on major issues when needed.
+13. Emit stage reports and maintain report index.
+14. Close task, write memory close-out, then optionally publish shared memory.
 
 ## Mode-Aware Interaction Policy
 
@@ -97,16 +98,19 @@ Use these in combination:
 6. Cooldown: no more than one non-forced memory operation per cycle.
 7. Avoid per-command memory writes; batch observations into one delta update.
 8. Use search/deep research directly when topic is time-sensitive, new, or currently blocked.
-9. For open-ended research/scoping requests, run deep research before giving decomposition or roadmap recommendations.
-9.1 For mid-run new research requests, run deep research re-entry before further execution.
-10. For unknown errors, use this branch:
+9. If project-local memory retrieval is low-yield, shared-memory retrieval may query the configured local shared repo as a read-only source.
+10. Do not sync the shared repo on every cycle; prefer the current local checkout and sync only on explicit gap handling or before export.
+11. For open-ended research/scoping requests, run deep research before giving decomposition or roadmap recommendations.
+11.1 For mid-run new research requests, run deep research re-entry before further execution.
+12. For unknown errors, use this branch:
    - local evidence triage (logs, stack trace, recent changes)
+   - shared-memory retrieval when reusable SOPs or prior debug cases are likely relevant
    - targeted search
    - deep research (debug-investigation) if still unresolved
    - minimal fix validation
-11. If skipping memory due to cooldown or low-value delta, record reason in the stage report.
-12. If intake information is missing, trigger `human-checkpoint` before deep research or planning.
-13. If deep research was used for open-ended scoping, hand off to `research-plan` to convert findings into an execution-ready plan. Skip only if the user explicitly opts out.
+13. If skipping memory due to cooldown or low-value delta, record reason in the stage report.
+14. If intake information is missing, trigger `human-checkpoint` before deep research or planning.
+15. If deep research was used for open-ended scoping, hand off to `research-plan` to convert findings into an execution-ready plan. Skip only if the user explicitly opts out.
 
 ## Replanning Policy
 
@@ -135,6 +139,7 @@ Do not export shared memory during core task execution.
 1. Complete the primary task first.
 2. Treat shared export as a post-task phase.
 3. Require `human-checkpoint` before publishing shared memory.
+4. Sync the shared repo before opening the export PR.
 
 ## Decision Policy
 

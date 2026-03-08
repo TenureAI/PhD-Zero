@@ -1,4 +1,4 @@
-# Project Context Schema (V2)
+# Project Context Schema (V3)
 
 Context is split into two JSON files under:
 
@@ -13,7 +13,7 @@ This schema is for runtime context only. Heavy runtime artifacts stay under:
 
 ```json
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "project": {
     "slug": "vision-sft-v2",
     "name": "vision-sft-v2"
@@ -38,6 +38,17 @@ This schema is for runtime context only. Heavy runtime artifacts stay under:
     "queue": "train",
     "gpu_type": "H100"
   },
+  "memory": {
+    "shared_repo": {
+      "enabled": true,
+      "path": "/Users/alice/work/open-research-memory",
+      "url": "https://github.com/TenureAI/open-research-memory",
+      "branch": "main",
+      "mode": "readonly-source",
+      "sync_policy": "minimal",
+      "auto_clone_if_missing": false
+    }
+  },
   "tracking": {
     "run_notes": ""
   },
@@ -49,7 +60,7 @@ This schema is for runtime context only. Heavy runtime artifacts stay under:
 
 ```json
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "api": {
     "endpoint": "https://internal-gateway.example.com",
     "key": "<redacted>"
@@ -110,7 +121,7 @@ Snapshot payload:
 
 ```json
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "run_id": "20260304_090000-vision-sft-v2",
   "task_type": "sft",
   "context": {"...": "..."},
@@ -118,6 +129,25 @@ Snapshot payload:
   "created_at": "2026-03-04T09:00:00Z"
 }
 ```
+
+## Shared Memory Source Fields
+
+Store shared-memory source configuration in `context.json` so the user is not re-prompted every run:
+
+- `memory.shared_repo.enabled`
+- `memory.shared_repo.path`
+- `memory.shared_repo.url`
+- `memory.shared_repo.branch`
+- `memory.shared_repo.mode`
+- `memory.shared_repo.sync_policy`
+- `memory.shared_repo.auto_clone_if_missing`
+
+Recommended semantics:
+
+- `mode=readonly-source`
+- `sync_policy=minimal`
+- ask the user for `memory.shared_repo.path` when shared retrieval/export is first needed
+- do not hardcode machine-specific paths into prompts or skills
 
 ## Legacy Compatibility
 

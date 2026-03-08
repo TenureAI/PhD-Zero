@@ -9,13 +9,14 @@ This workspace is for AI research and development tasks (reproduction, debugging
 4. Trigger `human-checkpoint` using mode-aware policy, always for major safety risks and shared-memory publication.
 5. Use `experiment-execution` only for actual run execution.
 6. Use `project-context` to collect and persist per-project private runtime context before experiments or report/eval execution.
-7. Use `deep-research` for deep external investigation and evidence synthesis, including early-stage project scoping when a user wants to write a research study or paper on a topic.
+7. Use `deep-research` for deep external investigation and evidence synthesis, including early-stage project scoping when a user wants to write a research study or paper on a topic, unless the user is explicitly asking for a paper-writing deliverable right now.
 8. Use `research-plan` when the user asks for a proposal, roadmap, ablation/evaluation plan, study design, or pre-implementation research decomposition.
 9. After open-ended scoping in `deep-research`, hand off findings into `research-plan` by default; skip only if the user explicitly opts out.
-10. Base conclusions on evidence only (command outputs, metrics, logs, and file diffs).
-11. Prefer small, reversible, verifiable steps over broad speculative changes.
-12. Follow `REPO_CONVENTIONS.md` for artifact placement and commit hygiene.
-13. If a run was initialized before confirmation, stop and run violation recovery: acknowledge, ask whether to keep/clean artifacts, and wait for explicit reconfirmation before continuing.
+10. Use `paper-writing` only when the user explicitly asks for a paper-writing deliverable such as drafting or revising a paper, section, or rebuttal. Do not use it for topic scoping, literature investigation, feasibility analysis, experiment design, or experiment execution.
+11. Base conclusions on evidence only (command outputs, metrics, logs, and file diffs).
+12. Prefer small, reversible, verifiable steps over broad speculative changes.
+13. Follow `REPO_CONVENTIONS.md` for artifact placement and commit hygiene.
+14. If a run was initialized before confirmation, stop and run violation recovery: acknowledge, ask whether to keep/clean artifacts, and wait for explicit reconfirmation before continuing.
 
 ## Memory Invocation Guardrails (Balanced)
 1. `memory-manager` is mandatory for non-trivial runs, but only as a control-plane step, not per command.
@@ -44,6 +45,12 @@ This workspace is for AI research and development tasks (reproduction, debugging
 5. Cooldown for non-forced deep-research calls:
    - at most once per stage unless objective changed or new contradiction/high-impact uncertainty appears.
 
+## Paper-Writing Trigger Guardrails
+1. Activate `paper-writing` only when the user explicitly asks for a paper-writing output.
+2. Valid triggers include drafting or revising a paper, a named paper section, or rebuttal text.
+3. Do not activate `paper-writing` just because the request mentions papers, literature, comparisons, or related work if the actual need is still research, planning, or experiments.
+4. If the user has not explicitly asked for paper-writing output, prefer `deep-research`, `research-plan`, or `experiment-execution` according to the current stage.
+
 ## Skill Paths
 - `.agents/skills/run-governor`
 - `.agents/skills/research-workflow`
@@ -54,6 +61,3 @@ This workspace is for AI research and development tasks (reproduction, debugging
 - `.agents/skills/deep-research`
 - `.agents/skills/project-context`
 - `.agents/skills/paper-writing`
-
-## Additional Skills
-- `paper-writing`: Progressive-disclosure paper writing skill for CS/AI papers. Use when drafting or revising sections such as abstract, introduction, related work, method, figures, experiments, or rebuttal text. Includes section-specific references plus an arXiv source-fetch workflow for mining LaTeX organization from exemplar papers.

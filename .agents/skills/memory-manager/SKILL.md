@@ -55,6 +55,22 @@ Retrieve early when useful, but do not block execution:
 4. Flag stale entries with low confidence.
 5. If retrieval is low-yield and task is time-sensitive, continue with search/deep research directly.
 
+## Shared Retrieval Policy
+
+Treat shared memory as an optional read-only source, not as project-local memory.
+
+1. Query project-local memory first.
+2. If local retrieval is low-yield, query the user-configured shared repo from `project-context`.
+3. Resolve the local shared repo path from `memory.shared_repo.path`; if missing, ask the user where the repo should live and persist it through `project-context`.
+4. Use read-only retrieval against the local shared repo checkout; do not mirror shared records into `.project_local` by default.
+5. Avoid syncing the shared repo on every run or stage.
+6. Sync only when:
+   - the shared repo checkout is missing and the user approved clone/bootstrap
+   - a retrieval gap remains and the local shared repo is suspected stale
+   - immediately before exporting shared memory
+7. Treat hits as `external/shared` evidence until they are validated in the current project.
+8. Do not rewrite shared records into local `episode/procedure/insight` as if they were observed locally unless the current run reproduced them.
+
 ## Writeback Policy
 
 Write conservatively and continuously:
@@ -173,15 +189,29 @@ Treat shared export as post-task work:
 2. Export only verified/high-value records.
 3. Never export noisy `working` state.
 4. Require `human-checkpoint` before publishing.
+5. Sync the shared repo before export so dedupe/conflict checks run against the latest branch tip.
 
 ## Shared Repository Contract
 
 When exporting:
 
-1. Target `https://github.com/recursive-forge/open-research-memory`.
+1. Target `https://github.com/TenureAI/open-research-memory`.
 2. Use pull-based flow: local export -> `codex/*` branch -> PR -> review -> merge.
 3. Never push directly to `main`.
 4. Enforce schema and required sections.
+
+## Shared Retrieval Helper
+
+Use the helper script for lightweight read-only search of a local shared repo checkout:
+
+```bash
+python3 .agents/skills/memory-manager/scripts/shared_memory_retrieval.py \
+  --repo-root /path/to/open-research-memory \
+  --query "cuda out of memory" \
+  --type procedure \
+  --task-type debug \
+  --limit 5
+```
 
 ## Required Operation Output
 

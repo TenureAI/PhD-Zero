@@ -13,6 +13,7 @@ Scope boundary:
 
 1. manages runtime context and secrets only
 2. does not store heavy experiment artifacts (checkpoints, dataset caches, large logs)
+3. stores per-project shared-memory source configuration, but not shared-memory records
 
 ## Trigger
 
@@ -22,6 +23,7 @@ Use this skill when any of these are needed:
 2. preflight checks before experiment/report/eval execution
 3. missing runtime fields during task execution
 4. per-run context snapshot for reproducibility
+5. first use of shared-memory retrieval or export for a project
 
 ## Private Directory Contract
 
@@ -50,6 +52,7 @@ Do not ask for all fields at once.
 5. ask only for missing required fields for the current task
 6. during execution, allow blocker-only delta prompts (e.g. missing API URL/key)
 7. persist immediately for reuse
+8. when shared-memory retrieval/export is needed, ask the user where the local shared-memory repo should live if `memory.shared_repo.path` is missing
 
 If new missing fields appear later, run preflight again and collect only deltas.
 
@@ -69,6 +72,7 @@ Recommended order in research execution:
 3. `project-context` preflight resolves runtime context and consumes remote reuse decision
 4. `experiment-execution` runs with resolved context
 5. `project-context` snapshot writes run-scoped frozen context
+6. shared-memory retrieval/export reuses `memory.shared_repo.*` from `context.json`
 
 ## Script
 
@@ -84,6 +88,14 @@ python3 .agents/skills/project-context/scripts/project_context.py preflight \
   --project-slug my-sft-project \
   --task-type sft \
   --run-id 20260303_130000-my-sft-project
+```
+
+```bash
+python3 .agents/skills/project-context/scripts/project_context.py preflight \
+  --project-root . \
+  --project-slug my-sft-project \
+  --task-type generic \
+  --require memory.shared_repo.path
 ```
 
 ```bash
@@ -105,5 +117,5 @@ For each operation, emit:
 1. `Project`: root and slug
 2. `Action`: preflight/show/snapshot
 3. `State`: loaded + newly collected fields
-4. `Paths`: local/context/secrets/snapshot/runtime paths
+4. `Paths`: local/context/secrets/snapshot/runtime/shared-memory paths
 5. `Missing`: unresolved required fields (if any)
