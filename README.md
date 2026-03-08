@@ -244,4 +244,3 @@ That is the first step toward the autonomous AI scientist.
 **Automating the grind. Scaling research.**
 
 </div>
-```
