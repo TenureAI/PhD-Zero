@@ -85,6 +85,69 @@ Treat stale working state as risk:
 3. Force review before high-resource actions.
 4. Force review after interruptions or unexpected failures.
 
+## Invocation Schedule (Balanced, Non-Aggressive)
+
+1. Mandatory once-per-run operations:
+   - bootstrap `retrieve/init-working` after intake and before planning/execution
+   - close-out writeback before final task completion
+2. Trigger-based operations between bootstrap and close-out:
+   - stage transition
+   - replan
+   - significant failure or new error signature
+   - before high-resource action
+   - before final answer/report handoff
+3. Periodic `working` refresh is required when either is true:
+   - at least 15 minutes since last memory operation
+   - at least 3 execution cycles since last memory operation
+4. Cooldown:
+   - no more than one non-forced memory operation per cycle
+   - skip when state delta is negligible
+5. Anti-overuse policy:
+   - do not write memory after every command/tool call
+   - prefer compact delta updates over full rewrites
+   - skip repeated retrieval if last retrieval is fresh and task/error signature is unchanged
+6. Command-gap fallback:
+   - if 5 consecutive commands/actions complete without a memory update, force one `working` refresh.
+   - treat this as a low-cost sync update (delta-first, concise).
+7. When skipped, log `memory_skip_reason` for auditability.
+
+## Post-Compression Recovery (Required)
+
+When memory is auto-compressed/summarized:
+
+1. Immediately run a `working` re-read before the next execution step.
+2. Rebuild `working` fields from recent evidence:
+   - latest stage report
+   - latest action/observation logs
+   - latest todo diff (`todo_active/todo_done/todo_blocked`)
+3. Publish a compact "post-compression state snapshot" and continue only after snapshot is consistent.
+
+## Layered Retrieval Timing
+
+Use layer-specific retrieval timing to avoid over-calling:
+
+1. `working` retrieve:
+   - mandatory bootstrap
+   - periodic refresh by Invocation Schedule
+   - mandatory after memory compression
+2. `episode` retrieve:
+   - at run start for same project/task_type
+   - at replan or major failure to avoid repeating failed paths
+3. `procedure` retrieve:
+   - before executing a new stage plan
+   - before high-resource or irreversible actions
+   - when repeated failure indicates a known SOP may exist
+4. `insight` retrieve:
+   - during planning/replanning for hypothesis shaping
+   - when evidence conflicts or root cause is unclear
+   - before final report/answer to run contradiction/boundary checks
+5. `persona` retrieve:
+   - once at run start
+   - on interaction mode switch or explicit user preference change
+   - before final user-facing delivery for style/alignment consistency
+6. Retrieval cooldown:
+   - `procedure/insight/persona` at most once per stage unless a new trigger appears.
+
 ## Recovery on Context Drift
 
 If execution becomes repetitive or confused:
@@ -130,3 +193,4 @@ For each memory operation, emit:
 4. `Rationale`
 5. `Evidence`
 6. `Result`
+7. `Trigger` (`bootstrap|stage-change|replan|error|high-resource|periodic|close-out`)

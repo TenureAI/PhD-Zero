@@ -81,7 +81,7 @@ Retry behavior should be mode-aware and evidence-driven.
 
 1. Choose control mode: direct SSH, SSH+session manager, scheduler, or existing remote agent.
 2. Declare remote model: remote-native or local-driver.
-3. If project-context has remote profile, confirm reuse policy before launch.
+3. Use remote profile reuse decision from `run-governor`; if missing, request exactly one confirmation via `human-checkpoint`.
 4. Validate connectivity and runtime basics before expensive launch when uncertainty exists.
 
 ## Logging and Failure Handling

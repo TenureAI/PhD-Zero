@@ -14,16 +14,18 @@ Drive AI R&D tasks with small, testable, evidence-first steps while respecting t
 For non-trivial tasks, run this order:
 
 1. Initialize run policy with `run-governor`.
-2. Understand user objective and current code/evidence state.
-3. Clarify ambiguous requirements through `human-checkpoint`.
-4. Complete intake checkpoint before planning or decomposition.
-5. Run deep research when needed.
-6. Build an execution plan (use `research-plan` for planning-heavy requests).
-7. Confirm plan as required by mode.
-8. Execute with working-memory todo tracking.
-9. Replan on major issues when needed.
-10. Emit stage reports and maintain report index.
-11. Close task, then optionally publish shared memory.
+2. Resolve runtime context with `project-context` before experiment/report/eval execution.
+3. Understand user objective and current code/evidence state.
+4. Clarify ambiguous requirements through `human-checkpoint`.
+5. Complete intake checkpoint before planning or decomposition.
+6. Run one `memory-manager` bootstrap (`retrieve/init-working`).
+7. Run deep research when needed.
+8. Build an execution plan (use `research-plan` for planning-heavy requests).
+9. Confirm plan as required by mode.
+10. Execute with trigger-based working-memory updates.
+11. Replan on major issues when needed.
+12. Emit stage reports and maintain report index.
+13. Close task, write memory close-out, then optionally publish shared memory.
 
 ## Mode-Aware Interaction Policy
 
@@ -50,6 +52,18 @@ Route required user interactions through `human-checkpoint`:
 3. Apply this routing to intake clarification, plan confirmation, replan confirmation, and parameter approvals.
 4. Log channel choice as `interaction_channel=request_user_input|plain-text-fallback` and include `fallback_reason` when used.
 
+## Mid-Run Intent Switch Gate (Mandatory)
+
+On each new user message:
+
+1. Re-evaluate objective and skill routing before executing the next pending action.
+2. If user intent shifts to research/scoping/comparison/root-cause inquiry, activate `deep-research` immediately.
+3. Do not continue stale execution plans when the objective changed materially.
+4. If `deep-research` is skipped, emit `dr_skip_reason` with freshness evidence (date/timestamp and source coverage), then continue.
+5. Cooldown:
+   - no more than one non-forced deep-research call per stage.
+   - bypass cooldown when objective changed, contradiction appears, or high-impact uncertainty remains unresolved.
+
 ## Default Execution Loop
 
 Repeat this loop until completion:
@@ -57,7 +71,7 @@ Repeat this loop until completion:
 1. Update success criteria.
 2. Collect or refresh evidence.
 3. Plan the smallest useful next action.
-4. Refresh working todo state.
+4. Refresh working todo state only when memory trigger conditions are met.
 5. Act.
 6. Observe outputs.
 7. Evaluate result quality and risk.
@@ -67,17 +81,32 @@ Repeat this loop until completion:
 
 Use these in combination:
 
-1. Treat memory as an optional accelerator, not a hard prerequisite.
-2. Use search/deep research directly when topic is time-sensitive, new, or currently blocked.
-3. For open-ended research/scoping requests, run deep research before giving decomposition or roadmap recommendations.
-4. For unknown errors, use this branch:
+1. `memory-manager` bootstrap is mandatory before planning/execution for non-trivial runs.
+2. Between bootstrap and close-out, memory operations are trigger-based and non-aggressive.
+3. Trigger memory operation when one of the following occurs:
+   - stage transition
+   - replan
+   - significant error or new error signature
+   - memory auto-compression/summarization completed
+   - before high-resource action
+   - before final answer/report handoff
+4. Periodic `working` memory refresh is required when either holds:
+   - at least 15 minutes since last memory operation
+   - at least 3 execution cycles since last memory operation
+5. Command-gap fallback: if 5 consecutive commands/actions finish without a memory update, force one concise `working` refresh.
+6. Cooldown: no more than one non-forced memory operation per cycle.
+7. Avoid per-command memory writes; batch observations into one delta update.
+8. Use search/deep research directly when topic is time-sensitive, new, or currently blocked.
+9. For open-ended research/scoping requests, run deep research before giving decomposition or roadmap recommendations.
+9.1 For mid-run new research requests, run deep research re-entry before further execution.
+10. For unknown errors, use this branch:
    - local evidence triage (logs, stack trace, recent changes)
    - targeted search
    - deep research (debug-investigation) if still unresolved
    - minimal fix validation
-5. If skipping memory before search, record reason in the stage report.
-6. If intake information is missing, trigger `human-checkpoint` before deep research or planning.
-7. If deep research was used for open-ended scoping, hand off to `research-plan` to convert findings into an execution-ready plan. Skip only if the user explicitly opts out.
+11. If skipping memory due to cooldown or low-value delta, record reason in the stage report.
+12. If intake information is missing, trigger `human-checkpoint` before deep research or planning.
+13. If deep research was used for open-ended scoping, hand off to `research-plan` to convert findings into an execution-ready plan. Skip only if the user explicitly opts out.
 
 ## Replanning Policy
 
