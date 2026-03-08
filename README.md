@@ -1,17 +1,23 @@
 <div align="center">
 
-# 🎓 PhD-Zero
+<img src="./assets/phd-zero-mark.svg" alt="PhD-Zero logo" width="112" />
+
+# PhD-Zero
 
 ### An Operating System for the Autonomous AI Scientist
 
 <p align="center">
+  <a href="./README_zh.md">简体中文</a> •
+  <a href="./README.md">English</a> •
   <a href="#-what-is-phd-zero">What is PhD-Zero?</a> •
   <a href="#-why-it-exists">Why it exists</a> •
   <a href="#-core-skill-stack">Skill Stack</a> •
   <a href="#-how-it-works">How it works</a> •
   <a href="#-quick-start">Quick Start</a> •
   <a href="#-roadmap">Roadmap</a> •
-  <a href="#-contributing">Contributing</a>
+  <a href="#-contributing">Contributing</a> •
+  <a href="#-acknowledgements">Acknowledgements</a> •
+  <a href="#-cite">Cite</a>
 </p>
 
 **Turn research workflows into reusable agent skills.**  
@@ -162,12 +168,15 @@ cd PhD-Zero
 
 ```bash
 find .agents/skills -mindepth 1 -maxdepth 1 -type d
+find .claude/skills -mindepth 1 -maxdepth 1 -type l
 ```
 
 ### 3. Connect your agent runtime
 
 * **Codex / Copilot-style agents** read workspace rules from `AGENTS.md`
 * **Claude Code** discovers the same capabilities through `.claude/skills/`
+
+If both commands in step 2 list the same skill names, the shared skill layer is wired correctly.
 
 ### 4. Start with a real research task
 
@@ -223,6 +232,21 @@ If you care about the future of **AI doing AI research**, this repo is for you.
 
 ---
 
+## 🙏 Acknowledgements
+
+PhD-Zero builds on the broader agent, tooling, and writing-assistance ecosystem.
+
+We especially want to acknowledge:
+
+- the contributors behind reusable coding-agent environments and workflow conventions
+- the open-source communities building skill systems for Codex, Claude Code, and adjacent agent runtimes
+- [blader/humanizer](https://github.com/blader/humanizer/tree/main), for practical text humanization patterns
+- [op7418/Humanizer-zh](https://github.com/op7418/Humanizer-zh), for Chinese-focused humanization references
+
+These projects are not dependencies of PhD-Zero, but they helped shape how we think about reusable agent behaviors and writing support.
+
+---
+
 ## 💡 Philosophy
 
 PhD-Zero is based on one belief:
@@ -234,6 +258,22 @@ Not just better prompts.
 But reusable, inspectable, evolving research workflows.
 
 That is the first step toward the autonomous AI scientist.
+
+---
+
+## 📚 Cite
+
+If PhD-Zero is useful in your workflow or research, please cite:
+
+```bibtex
+@misc{phd_zero_github,
+  author       = {TenureAI Contributors},
+  title        = {PhD-Zero: An Operating System for the Autonomous AI Scientist},
+  year         = {2026},
+  howpublished = {\url{https://github.com/TenureAI/PhD-Zero}},
+  note         = {GitHub repository}
+}
+```
 
 ---
 
