@@ -4,283 +4,114 @@
 
 # PhD-Zero
 
-### An Operating System for the Autonomous AI Scientist
+<p>An operating system for research-oriented coding agents.</p>
 
-<p align="center">
-  <a href="./README_zh.md">简体中文</a> •
-  <a href="./README.md">English</a> •
-  <a href="#-what-is-phd-zero">What is PhD-Zero?</a> •
-  <a href="#-why-it-exists">Why it exists</a> •
-  <a href="#-core-skill-stack">Skill Stack</a> •
-  <a href="#-how-it-works">How it works</a> •
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-roadmap">Roadmap</a> •
-  <a href="#-contributing">Contributing</a> •
-  <a href="#-acknowledgements">Acknowledgements</a> •
-  <a href="#-cite">Cite</a>
+<p>
+  <a href="./README_zh.md">简体中文</a> ·
+  <a href="./docs/index.html">Website</a> ·
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#core-skills">Core Skills</a> ·
+  <a href="#contributing">Contributing</a>
 </p>
-
-**Turn research workflows into reusable agent skills.**  
-**From literature search to experiment execution, memory, and paper writing.**
-
-*Built for Codex, Claude Code, and the future autonomous AI researcher.*
 
 </div>
 
----
+PhD-Zero is a repository of reusable skills for AI research work. The point is not to make an agent sound smart for one turn. The point is to give it a workflow it can actually follow: plan the task, gather evidence, run experiments, keep context, ask for human review when needed, and write results down in a form another person can inspect.
 
-## 👁️ What is PhD-Zero?
+The same skill library is exposed to different runtimes. Codex-style agents read workspace rules from `AGENTS.md`. Claude Code sees a mirrored discovery layer under `.claude/skills/`. The actual source of truth lives in `.agents/skills/`.
 
-**PhD-Zero** is an open-source **AI R&D operating layer** for coding agents.
+## Quick start
 
-Instead of treating research as a single prompt, PhD-Zero breaks it into structured, reusable skills:
-- plan the work,
-- search for evidence,
-- execute experiments,
-- manage memory,
-- request human review when needed,
-- and turn results into research artifacts.
-
-The goal is simple:
-
-- **Near term:** build an **intern-level AI researcher** that can reliably handle scoped R&D tasks.
-- **Long term:** build an **autonomous AI scientist** that can navigate the full algorithm-development lifecycle.
-
-In short, **PhD-Zero is the systems layer between raw model capability and real research execution.**
-
----
-
-## 🔥 Why it exists
-
-Today, strong models can already code, read papers, and debug scripts.
-
-What they still lack is **research discipline**.
-
-Real AI R&D is not just “generate an answer.” It requires:
-- staged execution,
-- evidence-backed reasoning,
-- memory across steps,
-- controlled experimentation,
-- and human checkpoints for expensive or risky decisions.
-
-PhD-Zero exists to provide that missing structure.
-
-It helps agents move:
-- **from vague ideas to executable plans**
-- **from one-shot prompting to reusable workflows**
-- **from hallucinated confidence to evidence-backed outputs**
-- **from isolated tasks to compounding research memory**
-
----
-
-## 🛠️ Core skill stack
-
-PhD-Zero decomposes AI research into modular skills that agents can discover and invoke.
-
-| Skill | Role in the system | Human analogy |
-| --- | --- | --- |
-| `run-governor` | Controls stages, execution discipline, and run safety | PI / project lead |
-| `research-workflow` | Default orchestration loop for non-trivial research tasks | Research manager |
-| `research-plan` | Turns open-ended goals into concrete plans, ablations, and study designs | Senior researcher |
-| `deep-research` | Collects external evidence, compares literature, and synthesizes findings | Literature reviewer |
-| `experiment-execution` | Runs code, debugs failures, and executes experiments | Research engineer |
-| `memory-manager` | Maintains working state and promotes reusable memory | Working + long-term memory |
-| `project-context` | Persists project-specific runtime context and conventions | Lab notebook |
-| `human-checkpoint` | Escalates risky, expensive, or high-impact decisions | Advisor / reviewer |
-| `paper-writing` | Drafts and revises research artifacts and paper text | Scientific writer |
-
-> **Research is not one capability. It is a coordinated system of capabilities.**
-
----
-
-## ⚙️ How it works
-
-PhD-Zero is designed as a **shared skill layer** for different coding agents.
-
-### For Codex / GitHub Copilot-style agents
-Repository-level behavior is defined through `AGENTS.md`.
-
-### For Claude Code
-Skills are exposed through `.claude/skills/`.
-
-### Source of truth
-The canonical skill definitions live in:
-
-```text
-.agents/skills/
-```
-
-This lets one repository drive multiple agent runtimes with the same research workflow logic.
-
----
-
-## 📂 Repository structure
-
-```text
-.
-├── AGENTS.md                  # Global operating rules for the workspace
-├── REPO_CONVENTIONS.md        # Artifact, logging, and repo hygiene rules
-├── .agents/
-│   └── skills/                # Canonical skill definitions
-├── .claude/
-│   └── skills/                # Claude Code discovery layer
-├── .github/
-│   └── workflows/             # Repo automation
-└── README.md
-```
-
----
-
-## ✨ What makes this different?
-
-Most “AI researcher” repos are one of these:
-
-* a benchmark,
-* a paper list,
-* a single-agent demo,
-* or a prompt pack.
-
-PhD-Zero is different because it focuses on **operationalizing research**.
-
-It is not just trying to make an agent sound smart.
-It is trying to make an agent **work like a research system**.
-
-That means:
-
-* explicit execution stages,
-* controlled memory usage,
-* evidence-first decisions,
-* reusable skills instead of ad hoc prompts,
-* and compatibility with multiple coding-agent environments.
-
----
-
-## 🚀 Quick start
-
-### 1. Clone the repository
+If you just want to see whether the repo is wired correctly, do this:
 
 ```bash
 git clone https://github.com/TenureAI/PhD-Zero.git
 cd PhD-Zero
-```
 
-### 2. Inspect the skill library
-
-```bash
 find .agents/skills -mindepth 1 -maxdepth 1 -type d
 find .claude/skills -mindepth 1 -maxdepth 1 -type l
 ```
 
-### 3. Connect your agent runtime
+Those two commands should list the same skill names. If they do, the shared skill layer is in place.
 
-* **Codex / Copilot-style agents** read workspace rules from `AGENTS.md`
-* **Claude Code** discovers the same capabilities through `.claude/skills/`
+From there:
 
-If both commands in step 2 list the same skill names, the shared skill layer is wired correctly.
+1. Read `AGENTS.md` to understand the workspace rules used by Codex-style agents.
+2. Inspect `.agents/skills/` if you want the canonical skill implementations.
+3. Inspect `.claude/skills/` if you want to verify the Claude Code mirror.
 
-### 4. Start with a real research task
+If you prefer a landing page over the raw repository view, there is also a static site under [docs/index.html](./docs/index.html).
 
-Examples:
+## What is in this repository?
 
-* reproduce a paper result
-* investigate why a training run failed
-* design an ablation plan
-* compare methods for a new project direction
-* draft a research report from experiment evidence
+The repository is intentionally small. It does not try to be a benchmark suite, a framework, and a demo app all at once. It is mostly a skill library plus the rules that tell agents how to use it.
 
----
+```text
+.
+├── AGENTS.md
+├── REPO_CONVENTIONS.md
+├── .agents/skills/      # canonical skill definitions
+├── .claude/skills/      # Claude Code mirror layer
+├── .github/workflows/   # repository validation
+├── assets/              # shared visual assets
+└── docs/                # static landing page
+```
 
-## 🧭 Roadmap
+The CI in this repo checks that the skill directories under `.agents/skills` and `.claude/skills` stay in sync, and that every tracked skill has a readable `SKILL.md`.
 
-PhD-Zero is the first layer of a larger vision.
+## Core skills
 
-### Phase 1 — AI Research Intern
+The current skill set covers the basic loop of a research-oriented agent:
 
-* scoped literature investigation
-* experiment planning
-* code execution and debugging
-* report drafting
+| Skill | What it is for |
+| --- | --- |
+| `run-governor` | Stage control, run discipline, and execution policy |
+| `research-workflow` | The default loop for non-trivial research tasks |
+| `research-plan` | Turning an open-ended goal into a concrete plan |
+| `deep-research` | External search, literature comparison, and synthesis |
+| `experiment-execution` | Running code, debugging, and experiment execution |
+| `memory-manager` | Working state and reusable memory |
+| `project-context` | Project-specific runtime context and conventions |
+| `human-checkpoint` | Human review for risky or expensive decisions |
+| `paper-writing` | Drafting and revising research artifacts |
 
-### Phase 2 — AI Research Collaborator
+That list will probably grow, but the idea is stable: break research into pieces that can be reused instead of trying to solve everything with one giant prompt.
 
-* reusable memory across projects
-* stronger project context persistence
-* better experiment iteration loops
-* improved human-in-the-loop checkpoints
+## Who this is for
 
-### Phase 3 — Autonomous AI Scientist
+PhD-Zero is for people who are already using coding agents in research or engineering-adjacent work and want more discipline around the process. If you care about literature review, experiment planning, reproducibility, or keeping an agent from improvising its way through a long task, this repo is meant to be useful. If you just want a flashy demo, it is probably not the right project.
 
-* independent hypothesis generation
-* self-directed experimentation
-* long-horizon project execution
-* end-to-end algorithm development
+## Contributing
 
----
+Contributions are welcome, especially in three areas:
 
-## 🤝 Contributing
+1. new skills that fit the repository's scope
+2. tighter workflows for the existing skills
+3. validation and examples from real usage
 
-We are building this in the open.
+Before opening a PR, check `REPO_CONVENTIONS.md`. This repo keeps reusable skill content in version control and keeps task-specific logs or run artifacts out.
 
-You can contribute by:
+## Acknowledgements
 
-1. adding new agent skills,
-2. improving existing workflows,
-3. contributing better evaluation tasks for AI R&D,
-4. or using PhD-Zero in real research loops and sharing what breaks.
+PhD-Zero is shaped by the broader ecosystem around coding agents, research tooling, and writing support. In particular, the repository draws useful ideas from projects that treat workflows as first-class artifacts rather than one-off prompts.
 
-If you care about the future of **AI doing AI research**, this repo is for you.
+We also want to acknowledge:
 
----
+- [blader/humanizer](https://github.com/blader/humanizer/tree/main)
+- [op7418/Humanizer-zh](https://github.com/op7418/Humanizer-zh)
 
-## 🙏 Acknowledgements
+These are not runtime dependencies here, but they were useful references when thinking about writing quality and reusable editing guidance.
 
-PhD-Zero builds on the broader agent, tooling, and writing-assistance ecosystem.
+## Cite
 
-We especially want to acknowledge:
-
-- the contributors behind reusable coding-agent environments and workflow conventions
-- the open-source communities building skill systems for Codex, Claude Code, and adjacent agent runtimes
-- [blader/humanizer](https://github.com/blader/humanizer/tree/main), for practical text humanization patterns
-- [op7418/Humanizer-zh](https://github.com/op7418/Humanizer-zh), for Chinese-focused humanization references
-
-These projects are not dependencies of PhD-Zero, but they helped shape how we think about reusable agent behaviors and writing support.
-
----
-
-## 💡 Philosophy
-
-PhD-Zero is based on one belief:
-
-> **AI research should become programmable.**
-
-Not just smarter outputs.
-Not just better prompts.
-But reusable, inspectable, evolving research workflows.
-
-That is the first step toward the autonomous AI scientist.
-
----
-
-## 📚 Cite
-
-If PhD-Zero is useful in your workflow or research, please cite:
+If PhD-Zero is useful in your workflow or research, you can cite it as:
 
 ```bibtex
 @misc{phd_zero_github,
   author       = {TenureAI Contributors},
-  title        = {PhD-Zero: An Operating System for the Autonomous AI Scientist},
+  title        = {PhD-Zero: An Operating System for Research-Oriented Coding Agents},
   year         = {2026},
   howpublished = {\url{https://github.com/TenureAI/PhD-Zero}},
   note         = {GitHub repository}
 }
 ```
-
----
-
-<div align="center">
-
-### Built by <a href="https://github.com/TenureAI">TenureAI</a>
-
-**Automating the grind. Scaling research.**
-
-</div>
