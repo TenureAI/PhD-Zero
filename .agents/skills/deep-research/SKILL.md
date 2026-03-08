@@ -46,6 +46,16 @@ Iterate until evidence quality is sufficient:
 8. Run contradiction/counter-evidence checks.
 9. Synthesize and produce final report.
 
+## Re-entry Policy (Mid-Run)
+
+When called during an ongoing run (not only at run start):
+
+1. Treat invocation as valid and do not require starting a new run by default.
+2. Recompute objective delta versus current stage plan.
+3. If objective changed materially, reset research focus and run fresh query batches.
+4. If objective is similar, perform incremental deep research using existing evidence as baseline.
+5. If skipped due to sufficient evidence freshness, emit `dr_skip_reason` with explicit date windows and source counts.
+
 ## Scoping-to-Planning Handoff Policy
 
 When deep research is used for open-ended scoping (`idea-exploration`), hand off findings to `research-plan` as the required default next step. Skip only if the user explicitly opts out.
@@ -234,10 +244,11 @@ Degrade rules:
 
 ## Memory and Search Policy
 
-1. Memory lookup is optional and situational.
-2. Use memory when likely to reduce repeated search effort.
-3. Use search/deep research directly when topic is new, urgent, or time-sensitive.
-4. If memory is skipped, note reason in report trail.
+1. Global memory bootstrap (from `run-governor` / `research-workflow`) is mandatory for non-trivial runs.
+2. Within deep-research, additional memory retrieval is optional and situational.
+3. Use incremental memory retrieval when it can reduce repeated search effort or contradiction resolution cost.
+4. Use search/deep research directly when topic is new, urgent, or time-sensitive.
+5. If incremental memory retrieval is skipped, note reason in report trail.
 
 ## Type-Aware Reporting Requirements
 

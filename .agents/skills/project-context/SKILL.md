@@ -46,7 +46,7 @@ Do not ask for all fields at once.
 1. infer task type (`report|sft|rl|eval|generic`)
 2. load existing `context.json` + `secrets.json`
 3. auto-detect non-sensitive environment values where possible
-4. if execution target is `remote`, show stored remote profile and ask whether to reuse it
+4. if execution target is `remote`, consume reuse decision from `run-governor` first; ask only if decision is missing
 5. ask only for missing required fields for the current task
 6. during execution, allow blocker-only delta prompts (e.g. missing API URL/key)
 7. persist immediately for reuse
@@ -64,9 +64,9 @@ If new missing fields appear later, run preflight again and collect only deltas.
 
 Recommended order in research execution:
 
-1. `run-governor` initializes mode and `run_id`
-2. `run-governor` collects `local|remote` target
-3. `project-context` preflight resolves runtime context and remote reuse decision
+1. `run-governor` collects and confirms mode + `local|remote` target
+2. `run-governor` initializes `run_id`
+3. `project-context` preflight resolves runtime context and consumes remote reuse decision
 4. `experiment-execution` runs with resolved context
 5. `project-context` snapshot writes run-scoped frozen context
 

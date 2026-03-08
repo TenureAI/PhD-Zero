@@ -78,6 +78,16 @@ Hard constraints:
 6. Confirmation collection must be mediated by `human-checkpoint`.
 7. Any assumption for mode/target is non-compliant, even when likely.
 
+## Memory Bootstrap Gate
+
+Before transitioning from initialization to execution workflow:
+
+1. Set `memory_policy=balanced-triggered` unless user explicitly overrides.
+2. Ensure one `memory-manager` bootstrap operation is complete:
+   - `retrieve` or `init-working` for current project/task context.
+3. If bootstrap is missing, mark status `blocked-awaiting-memory-bootstrap`.
+4. This gate enforces only the bootstrap, not per-step memory writes.
+
 ## Run Identity and Directories
 
 Use one run identifier:
@@ -176,6 +186,7 @@ For each run-governor action, emit:
 7. `Confirmation`: `user_confirmed_mode`, `user_confirmed_execution_target`, and whether initialization is permitted (`YES|NO`)
 8. `Compliance`: `gate_status=pass|blocked`, with blocked reason when applicable
 9. `Interaction`: `interaction_transport` and optional `fallback_reason`
+10. `Memory`: `memory_policy` and `memory_bootstrap_done=YES|NO`
 
 ## Violation Recovery Policy
 
