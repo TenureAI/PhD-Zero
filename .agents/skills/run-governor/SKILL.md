@@ -49,6 +49,7 @@ During run initialization, decide execution target before planning launch steps:
 3. ask user whether to reuse stored remote fields for this run
 4. if not reused or incomplete, collect only missing remote-required fields
 5. persist the final decision and resolved paths into run manifest and project-context
+6. if shared-memory retrieval/export is in scope, persist resolved shared repo metadata from `project-context` into the run manifest
 
 Remote-required fields:
 
@@ -124,6 +125,7 @@ Maintain these files in `<codex-cwd>/logs/runs/<run_id>/`:
    - runtime output root
    - execution target (`local|remote`)
    - runtime host (if remote)
+   - shared memory repo path/url/branch/sync policy when configured
    - optional additional project roots
    - output directory mapping
 3. `working/state.yaml`

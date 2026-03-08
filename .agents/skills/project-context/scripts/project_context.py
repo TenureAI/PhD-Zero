@@ -22,7 +22,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Tuple
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
+
+DEFAULT_SHARED_MEMORY_URL = "https://github.com/TenureAI/open-research-memory"
+DEFAULT_SHARED_MEMORY_BRANCH = "main"
+DEFAULT_SHARED_MEMORY_MODE = "readonly-source"
+DEFAULT_SHARED_MEMORY_SYNC_POLICY = "minimal"
 
 TASK_REQUIRED_FIELDS = {
     "generic": ["execution.execution_target", "execution.local_project_root"],
@@ -62,6 +67,9 @@ PROMPTS = {
     "execution.runtime_output_root": "Runtime output root path",
     "execution.runtime_host": "Runtime host",
     "execution.workspace_root": "Workspace root path",
+    "memory.shared_repo.path": "Local shared memory repo path",
+    "memory.shared_repo.url": "Shared memory repo URL",
+    "memory.shared_repo.branch": "Shared memory branch",
     "cluster.name": "Cluster name",
     "cluster.scheduler": "Scheduler (e.g. slurm/k8s/ray/local)",
     "cluster.queue": "Cluster queue/partition",
@@ -245,6 +253,41 @@ def normalize_context_layout(context: Dict[str, Any], project_root: Path) -> Lis
         nested_set(context, "execution.runtime_output_root", str(Path(str(runtime_root)) / "runs"))
         updated.append("execution.runtime_output_root")
 
+    def normalize_bool(key: str, default: bool) -> None:
+        value = nested_get(context, key)
+        if value in (None, ""):
+            nested_set(context, key, default)
+            updated.append(key)
+            return
+        if isinstance(value, bool):
+            return
+        if isinstance(value, str):
+            lowered = value.strip().lower()
+            if lowered in {"1", "true", "yes", "y", "on"}:
+                nested_set(context, key, True)
+                updated.append(key)
+            elif lowered in {"0", "false", "no", "n", "off"}:
+                nested_set(context, key, False)
+                updated.append(key)
+
+    set_if_missing("memory.shared_repo.url", DEFAULT_SHARED_MEMORY_URL)
+    set_if_missing("memory.shared_repo.branch", DEFAULT_SHARED_MEMORY_BRANCH)
+    set_if_missing("memory.shared_repo.mode", DEFAULT_SHARED_MEMORY_MODE)
+    set_if_missing("memory.shared_repo.sync_policy", DEFAULT_SHARED_MEMORY_SYNC_POLICY)
+    normalize_bool("memory.shared_repo.enabled", False)
+    normalize_bool("memory.shared_repo.auto_clone_if_missing", False)
+
+    shared_path = nested_get(context, "memory.shared_repo.path")
+    if isinstance(shared_path, str):
+        normalized_path = shared_path.strip()
+        if normalized_path != shared_path:
+            nested_set(context, "memory.shared_repo.path", normalized_path)
+            updated.append("memory.shared_repo.path")
+        shared_path = normalized_path
+    if shared_path not in (None, "") and nested_get(context, "memory.shared_repo.enabled") is False:
+        nested_set(context, "memory.shared_repo.enabled", True)
+        updated.append("memory.shared_repo.enabled")
+
     return updated
 
 
@@ -262,6 +305,16 @@ def detect_context(project_slug: str, project_root: Path) -> Dict[str, Any]:
         "execution": {
             "python_path": sys.executable,
             "local_project_root": str(project_root.resolve()),
+        },
+        "memory": {
+            "shared_repo": {
+                "enabled": False,
+                "url": DEFAULT_SHARED_MEMORY_URL,
+                "branch": DEFAULT_SHARED_MEMORY_BRANCH,
+                "mode": DEFAULT_SHARED_MEMORY_MODE,
+                "sync_policy": DEFAULT_SHARED_MEMORY_SYNC_POLICY,
+                "auto_clone_if_missing": False,
+            }
         },
     }
 
@@ -466,6 +519,8 @@ def preflight(args: argparse.Namespace) -> int:
                 "local_project_root": str(nested_get(context, "execution.local_project_root") or ""),
                 "runtime_project_root": str(nested_get(context, "execution.runtime_project_root") or ""),
                 "runtime_output_root": str(nested_get(context, "execution.runtime_output_root") or ""),
+                "shared_memory_repo_path": str(nested_get(context, "memory.shared_repo.path") or ""),
+                "shared_memory_repo_url": str(nested_get(context, "memory.shared_repo.url") or ""),
             },
             ensure_ascii=True,
         )

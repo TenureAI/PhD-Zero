@@ -1,6 +1,6 @@
 ---
 name: paper-writing
-description: Write CS/AI papers with progressive disclosure. Use when drafting or revising sections such as abstract, introduction, related work, method, figures, experiments, or rebuttal text. Starts from a top-level workflow and loads only the section-specific reference needed. Includes arXiv source-fetch workflow for mining LaTeX organization from exemplar papers.
+description: Write CS/AI papers with progressive disclosure. Use only when the user explicitly asks for a paper-writing deliverable, such as drafting or revising sections like abstract, introduction, related work, method, figures, experiments, or rebuttal text. Starts from a top-level workflow and loads only the section-specific reference needed. Includes arXiv source-fetch workflow for mining LaTeX organization from exemplar papers.
 ---
 
 # Paper Writing
@@ -15,6 +15,26 @@ Provide a section-aware paper-writing workflow that is:
 4. optimized for CS and AI papers
 
 Do not load all writing guidance at once. Start here, then open only the reference file needed for the current section.
+
+## Activation Gate
+
+Activate this skill only when the user explicitly asks for paper-writing output.
+
+Use this skill for:
+
+1. drafting a paper or a named paper section
+2. revising existing paper prose
+3. writing rebuttal text
+4. turning existing claims, evidence, and results into paper-ready prose
+
+Do not use this skill for:
+
+1. topic scoping
+2. literature investigation without a writing deliverable
+3. feasibility analysis
+4. experiment design
+5. experiment execution
+6. deciding whether a project is paper-worthy
 
 ## Default Workflow
 

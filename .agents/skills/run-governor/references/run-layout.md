@@ -33,3 +33,4 @@ Notes:
 3. Keep run_id consistent across control, runtime output, and snapshot paths.
 4. In local execution, `runtime_project_root` can equal `local_project_root`.
 5. In remote execution, `runtime_project_root` should be remote and explicit.
+6. `run_manifest.yaml` may also record resolved shared-memory source metadata such as repo path, URL, branch, and sync policy.
