@@ -1,0 +1,4 @@
+interface:
+  display_name: "Paper Writing"
+  short_description: "Draft and revise CS/AI paper sections from evidence."
+  default_prompt: "Use $paper-writing to draft or revise CS/AI paper sections from available evidence, citations, and experiment results."
