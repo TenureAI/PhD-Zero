@@ -1,61 +1,113 @@
-# AI Research Skills
+<div align="center">
 
-这个仓库维护一份共享的 skill 内容，同时兼容 Codex 和 Claude Code。
+# 🎓 PhD-Zero
 
-当前 skills：
+**The First Step Toward the Autonomous AI Scientist.**
 
-- `run-governor`
-- `research-workflow`
-- `memory-manager`
-- `human-checkpoint`
-- `experiment-execution`
-- `deep-research`
-- `project-context`
+<p align="center">
+<a href="#-the-vision">The Vision</a> •
+<a href="#-why-phd-zero">Why Zero?</a> •
+<a href="#-included-skills">Capabilities</a> •
+<a href="#-quick-start">Quick Start</a> •
+<a href="#-contributing">Contribute</a>
+</p>
 
-## 目录约定
+*"Research is a search problem. PhD-Zero is the solver."*
 
-真实内容只保留一份，统一放在 `.agents/skills/`。
+</div>
 
-每个 skill 目录下包含：
+---
 
-- `SKILL.md`
-- 可选的 `references/`
-- 可选的 `agents/`
+## 👁️ The Vision
 
-为了兼容不同工具，仓库提供两个发现入口，全部用软链接指向同一份内容：
+**PhD-Zero** is the foundational layer of the **TenureAI** initiative: a project dedicated to building an autonomous AI Scientist capable of independent experimentation, discovery, and development.
 
-- Codex: 直接读取 `.agents/skills/<skill-name>/SKILL.md`
-- Claude Code: `.claude/skills/<skill-name> -> ../../.agents/skills/<skill-name>`
+Current AI R&D is bottlenecked by human "manual labor"—scraping Arxiv, boilerplate coding, monitoring logs, and drafting reports. PhD-Zero transforms these research intuitions into **programmable agent skills**.
 
-这意味着：
+* **Short-term Goal**: An intern-level AI researcher capable of executing specific R&D tasks.
+* **Ultimate Goal**: A full-stack AI Scientist that automates the entire algorithm development lifecycle.
 
-- 改 skill 只改 `.agents/skills/` 下的真实目录
-- 不维护第二份拷贝
-- 不做内容转换
+---
 
-## Run 路径约定（执行时）
+## 🔥 Why PhD-Zero?
 
-- 控制日志与阶段报告：`<codex-cwd>/logs/runs/<run_id>/`
-- 项目实验产物：`<project-root>/runs/<run_id>/`
+In the era of "Scale is All You Need," simple prompting is no longer sufficient for complex research. PhD-Zero provides a **standardized operating layer** for your coding agents (Codex / Claude Code):
 
-## AGENTS.md 的作用
+* **From Intuition to Algorithm**: Translates vague research ideas into rigorous `experiment-execution` pipelines.
+* **Unified Skill Interface**: One codebase that drives both Codex and Claude Code through a shared skill-discovery protocol.
+* **Evidence-Backed Reasoning**: Enforces `deep-research` and data collection to eliminate hallucination.
+* **Operational Discipline**: Uses the `run-governor` to prevent agents from spiraling into infinite loops or wasting tokens.
 
-`AGENTS.md` 负责项目级指令和行为规范，不负责 skill 的物理存放。
+---
 
-- Codex 读取 `AGENTS.md`
-- skills 通过 `.agents/skills` 发现
-- Claude Code 通过 `.claude/skills` 发现
+## 🛠️ Capability Matrix (Included Skills)
 
-## CI
+PhD-Zero decomposes the research process into modular, reusable skills:
 
-仓库 CI 检查：
+| Skill | Primary Function | Equivalent Human Role |
+| --- | --- | --- |
+| **`run-governor`** | Execution discipline and stage control | **Principal Investigator** |
+| **`research-plan`** | Task decomposition and logical modeling | **Senior Researcher** |
+| **`deep-research`** | Automated Arxiv retrieval and synthesis | **Literature Specialist** |
+| **`experiment-execution`** | Automated coding, execution, and debugging | **Algorithm Engineer** |
+| **`memory-manager`** | Context restoration and progress tracking | **Human Working Memory** |
+| **`paper-writing`** | LaTeX drafting and academic polishing | **Scientific Writer** |
+| **`human-checkpoint`** | High-risk gatekeeping and feedback loops | **Reviewer / Advisor** |
 
-- `.agents/skills` 和 `.claude/skills` 的 skill 名称集合一致
-- 每个 skill 都有可解析的 `SKILL.md`
+---
 
-## 快速检查
+## 🚀 Quick Start
+
+### 1. Initialize the Lab
 
 ```bash
-find .agents/skills -mindepth 1 -maxdepth 1 -type d
-find .claude/skills -mindepth 1 -maxdepth 1 -type l
+git clone https://github.com/TenureAI/PhD-Zero.git
+cd PhD-Zero
+
 ```
+
+### 2. Connect Your Agents
+
+PhD-Zero uses a dual-discovery mechanism to ensure cross-platform compatibility:
+
+```bash
+# Verify available skills
+find .agents/skills -mindepth 1 -maxdepth 1 -type d
+
+```
+
+* **Codex (GitHub Copilot)**: Reads repository-level instructions from `AGENTS.md`.
+* **Claude Code**: Discovers capabilities via symlinks in the `.claude/skills/` directory.
+
+---
+
+## 📂 Repository Layout
+
+```text
+.
+├── AGENTS.md                # The Agent Constitution & Operating Rules
+├── .agents/
+│   └── skills/              # Source of Truth: Modular skill definitions
+├── .claude/
+│   └── skills/              # Claude Code discovery layer (Symlinks)
+└── logs/                    # Execution traces and stage reports
+
+```
+
+---
+
+## 🤝 Join the Evolution
+
+We are looking for engineers and researchers who want to automate themselves out of the grind.
+
+1. **Star This Repo**: If you believe the future of AI development belongs to AI.
+2. **Submit a Skill**: Help PhD-Zero evolve by contributing your research workflows.
+3. **Spread the Word**: Follow the journey via **#TenureAI** on Twitter.
+
+---
+
+<div align="center">
+
+**Built with 🧠 by [TenureAI](https://github.com/TenureAI)** *Automating the grind. Scaling the genius.*
+
+</div>
