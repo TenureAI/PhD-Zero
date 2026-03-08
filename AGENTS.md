@@ -53,3 +53,7 @@ This workspace is for AI research and development tasks (reproduction, debugging
 - `.agents/skills/experiment-execution`
 - `.agents/skills/deep-research`
 - `.agents/skills/project-context`
+- `.agents/skills/paper-writing`
+
+## Additional Skills
+- `paper-writing`: Progressive-disclosure paper writing skill for CS/AI papers. Use when drafting or revising sections such as abstract, introduction, related work, method, figures, experiments, or rebuttal text. Includes section-specific references plus an arXiv source-fetch workflow for mining LaTeX organization from exemplar papers.
