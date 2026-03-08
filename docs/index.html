@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PhD-Zero</title>
+    <meta
+      name="description"
+      content="PhD-Zero is an operating system for the autonomous AI scientist, built as a reusable skill layer for Codex, Claude Code, and future research agents."
+    />
+    <link rel="icon" href="../assets/phd-zero-mark.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <nav class="topbar">
+          <a class="brand" href="#top">
+            <img src="../assets/phd-zero-mark.svg" alt="PhD-Zero logo" />
+            <span>PhD-Zero</span>
+          </a>
+          <div class="topbar-links">
+            <a href="https://github.com/TenureAI/PhD-Zero">GitHub</a>
+            <a href="../README.md">README</a>
+            <a href="../README_zh.md">中文</a>
+          </div>
+        </nav>
+
+        <section class="hero-grid" id="top">
+          <div class="hero-copy">
+            <p class="eyebrow">Research Infrastructure for Coding Agents</p>
+            <h1>An Operating System for the Autonomous AI Scientist</h1>
+            <p class="lede">
+              PhD-Zero turns AI research workflows into reusable agent skills. It gives coding agents a
+              disciplined operating layer for planning, evidence gathering, experiment execution, memory,
+              human review, and paper writing.
+            </p>
+            <div class="hero-actions">
+              <a class="button primary" href="https://github.com/TenureAI/PhD-Zero">View Repository</a>
+              <a class="button secondary" href="#quick-start">Quick Start</a>
+            </div>
+            <ul class="hero-points">
+              <li>Built for Codex and Claude Code</li>
+              <li>Structured around reusable research skills</li>
+              <li>Designed for evidence-backed execution, not one-shot prompting</li>
+            </ul>
+          </div>
+
+          <div class="hero-card">
+            <div class="card-header">Core Skill Stack</div>
+            <div class="skill-list">
+              <div class="skill-item"><strong>run-governor</strong><span>Execution discipline and safety</span></div>
+              <div class="skill-item"><strong>deep-research</strong><span>Literature search and evidence synthesis</span></div>
+              <div class="skill-item"><strong>experiment-execution</strong><span>Code runs, debugging, and experiments</span></div>
+              <div class="skill-item"><strong>memory-manager</strong><span>Working and reusable research memory</span></div>
+              <div class="skill-item"><strong>paper-writing</strong><span>Drafting papers and research artifacts</span></div>
+            </div>
+          </div>
+        </section>
+      </header>
+
+      <main>
+        <section class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Why It Exists</p>
+            <h2>Strong models still need research discipline</h2>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card">
+              <h3>From prompts to workflows</h3>
+              <p>PhD-Zero decomposes research into reusable stages instead of treating it as a single response.</p>
+            </article>
+            <article class="feature-card">
+              <h3>From guesses to evidence</h3>
+              <p>Skills are built around search, verification, experiments, and explicit reporting.</p>
+            </article>
+            <article class="feature-card">
+              <h3>From isolated runs to memory</h3>
+              <p>Project context and memory skills let agents accumulate reusable research state over time.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-heading">
+            <p class="eyebrow">How It Works</p>
+            <h2>One skill source, multiple agent runtimes</h2>
+          </div>
+          <div class="stack-layout">
+            <div class="stack-column">
+              <span class="stack-label">Source of Truth</span>
+              <div class="stack-box"><code>.agents/skills/</code></div>
+            </div>
+            <div class="stack-arrow">→</div>
+            <div class="stack-column">
+              <span class="stack-label">Codex / Copilot-style agents</span>
+              <div class="stack-box"><code>AGENTS.md</code> + workspace skills</div>
+            </div>
+            <div class="stack-arrow">→</div>
+            <div class="stack-column">
+              <span class="stack-label">Claude Code</span>
+              <div class="stack-box"><code>.claude/skills/</code> mirror layer</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="quick-start">
+          <div class="section-heading">
+            <p class="eyebrow">Quick Start</p>
+            <h2>Get the skill layer wired correctly</h2>
+          </div>
+          <div class="quickstart-grid">
+            <article class="code-card">
+              <h3>1. Clone</h3>
+              <pre><code>git clone https://github.com/TenureAI/PhD-Zero.git
+cd PhD-Zero</code></pre>
+            </article>
+            <article class="code-card">
+              <h3>2. Inspect skills</h3>
+              <pre><code>find .agents/skills -mindepth 1 -maxdepth 1 -type d
+find .claude/skills -mindepth 1 -maxdepth 1 -type l</code></pre>
+            </article>
+            <article class="code-card">
+              <h3>3. Use with your agent</h3>
+              <pre><code># Codex / Copilot-style agents
+cat AGENTS.md
+
+# Claude Code discovers mirrored skills
+find .claude/skills -mindepth 1 -maxdepth 1 -type l</code></pre>
+            </article>
+          </div>
+          <p class="section-note">
+            If the skill names listed under <code>.agents/skills</code> and <code>.claude/skills</code> match,
+            the shared skill layer is wired correctly.
+          </p>
+        </section>
+
+        <section class="section">
+          <div class="section-heading">
+            <p class="eyebrow">Roadmap</p>
+            <h2>From research intern to autonomous scientist</h2>
+          </div>
+          <div class="roadmap">
+            <article class="roadmap-step">
+              <span class="roadmap-phase">Phase 1</span>
+              <h3>AI Research Intern</h3>
+              <p>Scoped literature investigation, experiment planning, execution, debugging, and report drafting.</p>
+            </article>
+            <article class="roadmap-step">
+              <span class="roadmap-phase">Phase 2</span>
+              <h3>AI Research Collaborator</h3>
+              <p>Persistent project context, reusable memory, better iteration loops, and stronger checkpoints.</p>
+            </article>
+            <article class="roadmap-step">
+              <span class="roadmap-phase">Phase 3</span>
+              <h3>Autonomous AI Scientist</h3>
+              <p>Independent hypothesis generation, self-directed experimentation, and long-horizon research execution.</p>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,5 +1,9 @@
 .DS_Store
 docs/
+!docs/
+docs/*
+!docs/index.html
+!docs/styles.css
 workspace/
 WORKSPACE/
 .project_local/
