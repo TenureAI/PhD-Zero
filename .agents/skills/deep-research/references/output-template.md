@@ -46,6 +46,15 @@ Then add short narrative:
 - For `conflict-resolution`: dispute map and source-tier arbitration.
 - For `idea-exploration`: landscape and opportunity boundaries.
 
+## Codebase and Data Audit (When Applicable)
+
+- target repo inspected or not
+- related official repos found or not
+- strongest runnable baseline repo
+- dataset/workload alignment choice
+- main reproducibility risks
+- unresolved gaps
+
 ## Research Trail Summary
 
 - queries_run=
@@ -101,3 +110,4 @@ Rules:
 4. Match output language to user language.
 5. If topic is paper-centric, do not skip `Key Works Deep Dive`.
 6. If degradation is used, include explicit degradation metadata and `Degrade Log`.
+7. If `references/codebase-and-data-research-rules.md` applies, do not skip `Codebase and Data Audit`.
