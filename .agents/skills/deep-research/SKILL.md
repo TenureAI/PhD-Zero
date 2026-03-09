@@ -46,6 +46,8 @@ Iterate until evidence quality is sufficient:
 8. Run contradiction/counter-evidence checks.
 9. Synthesize and produce final report.
 
+When the topic has implementation, benchmark, reproduction, or planning implications, also apply [references/codebase-and-data-research-rules.md](references/codebase-and-data-research-rules.md).
+
 ## Re-entry Policy (Mid-Run)
 
 When called during an ongoing run (not only at run start):

@@ -44,6 +44,9 @@ For each experiment, fill:
 
 - Language / framework:
 - Existing repo to reuse:
+- Codebase strategy label (`extend current repo` / `reuse official repo` / `port ideas into target repo` / `build minimal new repo`):
+- Comparison repos considered:
+- Strongest runnable baseline repo:
 - Experiment or execution entry points:
 - Evaluation entry points:
 - Config system:
@@ -63,10 +66,13 @@ For each experiment, fill:
 ### Data / Workloads / Inputs
 
 - Primary data source / workload / benchmark:
+- Dataset/workload strategy label (`aligned with prior work` / `aligned plus target-domain extension` / `new benchmark strategy`):
+- Which related works use the chosen data:
 - Validation / comparison scope:
 - Robustness input:
 - License / access:
 - Preprocessing / normalization:
+- Comparability risks:
 
 ### Additional Experiment Variants
 

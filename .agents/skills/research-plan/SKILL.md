@@ -102,6 +102,8 @@ Follow this order unless the user explicitly asks for a lighter output:
 9. Specify the implementation foundation.
 10. Specify expected outcomes and decision rules.
 
+When the plan depends on repository choice, reproducibility, benchmark selection, or dataset alignment, apply [references/codebase-and-data-research-rules.md](references/codebase-and-data-research-rules.md).
+
 ## Experiment Design Rules
 
 Do not produce vague items such as "run some experiments" or "evaluate performance."
