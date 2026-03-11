@@ -88,29 +88,33 @@ Use these in combination:
    - stage transition
    - replan
    - significant error or new error signature
+   - the current task modifies `memory-manager` or another Memory-related skill/policy
+   - state/context files show compaction markers such as `Compact`, `压缩`, `Summary`, or equivalent summary/compression techniques
    - memory auto-compression/summarization completed
    - before high-resource action
    - before final answer/report handoff
-4. Periodic `working` memory refresh is required when either holds:
+4. In memory-skill-edit or compaction cases, call `memory-manager` to read prior Memory before planning, editing, or resuming execution.
+5. Periodic `working` memory refresh is required when either holds:
    - at least 15 minutes since last memory operation
    - at least 3 execution cycles since last memory operation
-5. Command-gap fallback: if 5 consecutive commands/actions finish without a memory update, force one concise `working` refresh.
-6. Cooldown: no more than one non-forced memory operation per cycle.
-7. Avoid per-command memory writes; batch observations into one delta update.
-8. Use search/deep research directly when topic is time-sensitive, new, or currently blocked.
-9. If project-local memory retrieval is low-yield, shared-memory retrieval may query the configured local shared repo as a read-only source.
-10. Do not sync the shared repo on every cycle; prefer the current local checkout and sync only on explicit gap handling or before export.
-11. For open-ended research/scoping requests, run deep research before giving decomposition or roadmap recommendations.
-11.1 For mid-run new research requests, run deep research re-entry before further execution.
-12. For unknown errors, use this branch:
+6. Command-gap fallback: if 5 consecutive commands/actions finish without a memory update, force one concise `working` refresh.
+7. Cooldown: no more than one non-forced memory operation per cycle.
+8. Avoid per-command memory writes; batch observations into one delta update.
+9. Use search/deep research directly when topic is time-sensitive, new, or currently blocked.
+10. If project-local memory retrieval is low-yield, shared-memory retrieval may query the configured local shared repo as a read-only source.
+11. Do not sync the shared repo on every cycle; prefer the current local checkout and sync only on explicit gap handling or before export.
+12. For open-ended research/scoping requests, run deep research before giving decomposition or roadmap recommendations.
+12.1 For mid-run new research requests, run deep research re-entry before further execution.
+13. For unknown errors, use this branch:
    - local evidence triage (logs, stack trace, recent changes)
    - shared-memory retrieval when reusable SOPs or prior debug cases are likely relevant
    - targeted search
    - deep research (debug-investigation) if still unresolved
    - minimal fix validation
-13. If skipping memory due to cooldown or low-value delta, record reason in the stage report.
-14. If intake information is missing, trigger `human-checkpoint` before deep research or planning.
-15. If deep research was used for open-ended scoping, hand off to `research-plan` to convert findings into an execution-ready plan. Skip only if the user explicitly opts out.
+14. If compaction is detected, treat missing memory retrieval as a workflow violation and recover by reading prior Memory before continuing.
+15. If skipping memory due to cooldown or low-value delta outside the memory-skill-edit or compaction cases, record reason in the stage report.
+16. If intake information is missing, trigger `human-checkpoint` before deep research or planning.
+17. If deep research was used for open-ended scoping, hand off to `research-plan` to convert findings into an execution-ready plan. Skip only if the user explicitly opts out.
 
 ## Replanning Policy
 

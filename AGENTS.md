@@ -6,17 +6,18 @@ This workspace is for AI research and development tasks (reproduction, debugging
 1. Start each non-trivial research task with `run-governor`, but do not initialize `run_id` paths before explicit user confirmation of both `mode` and execution target (`local|remote`).
 2. Use `research-workflow` as the default orchestration loop.
 3. Use `memory-manager` to maintain working todo state and long-term memory.
-4. Trigger `human-checkpoint` using mode-aware policy, always for major safety risks and shared-memory publication.
-5. Use `experiment-execution` only for actual run execution.
-6. Use `project-context` to collect and persist per-project private runtime context before experiments or report/eval execution.
-7. Use `deep-research` for deep external investigation and evidence synthesis, including early-stage project scoping when a user wants to write a research study or paper on a topic, unless the user is explicitly asking for a paper-writing deliverable right now.
-8. Use `research-plan` when the user asks for a proposal, roadmap, ablation/evaluation plan, study design, or pre-implementation research decomposition.
-9. After open-ended scoping in `deep-research`, hand off findings into `research-plan` by default; skip only if the user explicitly opts out.
-10. Use `paper-writing` only when the user explicitly asks for a paper-writing deliverable such as drafting or revising a paper, section, or rebuttal. Do not use it for topic scoping, literature investigation, feasibility analysis, experiment design, or experiment execution.
-11. Base conclusions on evidence only (command outputs, metrics, logs, and file diffs).
-12. Prefer small, reversible, verifiable steps over broad speculative changes.
-13. Follow `REPO_CONVENTIONS.md` for artifact placement and commit hygiene.
-14. If a run was initialized before confirmation, stop and run violation recovery: acknowledge, ask whether to keep/clean artifacts, and wait for explicit reconfirmation before continuing.
+4. If you modify `memory-manager` or any Memory-related skill, or detect compaction markers in state/context files such as `Compact`, `压缩`, `Summary`, or similar summary/compression techniques, invoke `memory-manager` to read prior Memory before continuing so key context is not dropped.
+5. Trigger `human-checkpoint` using mode-aware policy, always for major safety risks and shared-memory publication.
+6. Use `experiment-execution` only for actual run execution.
+7. Use `project-context` to collect and persist per-project private runtime context before experiments or report/eval execution.
+8. Use `deep-research` for deep external investigation and evidence synthesis, including early-stage project scoping when a user wants to write a research study or paper on a topic, unless the user is explicitly asking for a paper-writing deliverable right now.
+9. Use `research-plan` when the user asks for a proposal, roadmap, ablation/evaluation plan, study design, or pre-implementation research decomposition.
+10. After open-ended scoping in `deep-research`, hand off findings into `research-plan` by default; skip only if the user explicitly opts out.
+11. Use `paper-writing` only when the user explicitly asks for a paper-writing deliverable such as drafting or revising a paper, section, or rebuttal. Do not use it for topic scoping, literature investigation, feasibility analysis, experiment design, or experiment execution.
+12. Base conclusions on evidence only (command outputs, metrics, logs, and file diffs).
+13. Prefer small, reversible, verifiable steps over broad speculative changes.
+14. Follow `REPO_CONVENTIONS.md` for artifact placement and commit hygiene.
+15. If a run was initialized before confirmation, stop and run violation recovery: acknowledge, ask whether to keep/clean artifacts, and wait for explicit reconfirmation before continuing.
 
 ## Memory Invocation Guardrails (Balanced)
 1. `memory-manager` is mandatory for non-trivial runs, but only as a control-plane step, not per command.
