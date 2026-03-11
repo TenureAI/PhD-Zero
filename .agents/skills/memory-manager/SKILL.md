@@ -50,10 +50,14 @@ Todo granularity should be task-level (small stages/subtasks), not command-level
 Retrieve early when useful, but do not block execution:
 
 1. Query by `project`, `task_type`, `error_signature` first.
-2. Add tags and FTS when exact filters miss.
-3. Prefer `active` procedures/insights when confidence is similar.
-4. Flag stale entries with low confidence.
-5. If retrieval is low-yield and task is time-sensitive, continue with search/deep research directly.
+2. Upgrade retrieval from optional to mandatory before continuing when either of these triggers is present:
+   - you are modifying `memory-manager` or another Memory-related skill/instruction
+   - a status, state, or context file contains compaction markers such as `Compact`, `压缩`, `Summary`, or similar summary/compression techniques
+3. In mandatory-retrieval cases, read prior Memory first and treat the result as required context recovery rather than a best-effort lookup.
+4. Add tags and FTS when exact filters miss.
+5. Prefer `active` procedures/insights when confidence is similar.
+6. Flag stale entries with low confidence.
+7. If retrieval is low-yield and task is time-sensitive, continue with search/deep research directly only when the mandatory-retrieval triggers are absent.
 
 ## Shared Retrieval Policy
 
@@ -170,7 +174,17 @@ If execution becomes repetitive or confused:
 
 1. Rebuild working state from action and observation logs.
 2. Run targeted retrieval by project/task/error signature.
-3. Publish compact state summary before continuing.
+3. If drift followed a compaction step or summary-style recovery, read prior Memory before publishing or trusting a compact state summary.
+4. Publish compact state summary before continuing.
+
+## Compaction Recovery Policy
+
+When context may have been compressed:
+
+1. Inspect available status/state/context files for markers such as `Compact`, `压缩`, `Summary`, or equivalent summary/compression techniques.
+2. If any marker is present, call `memory-manager` to read prior Memory before editing instructions, planning next actions, or resuming execution.
+3. If prior Memory cannot be read, treat that as an active blocker because key context may be missing.
+4. Record the compaction trigger and retrieval result in working state or the next stage report.
 
 ## Promotion Policy
 
