@@ -68,15 +68,20 @@ Repeat this loop until completion:
 Use these in combination:
 
 1. Treat memory as an optional accelerator, not a hard prerequisite.
-2. Use search/deep research directly when topic is time-sensitive, new, or currently blocked.
-3. For open-ended research/scoping requests, run deep research before giving decomposition or roadmap recommendations.
-4. For unknown errors, use this branch:
+2. Override that default and retrieve memory first when either of these is true:
+   - the current task modifies `memory-manager` or another Memory-related skill/policy
+   - state/context files show compaction markers such as `Compact`, `压缩`, `Summary`, or equivalent summary/compression techniques
+3. In those override cases, call `memory-manager` to read prior Memory before planning, editing, or resuming execution.
+4. Use search/deep research directly when topic is time-sensitive, new, or currently blocked.
+5. For open-ended research/scoping requests, run deep research before giving decomposition or roadmap recommendations.
+6. For unknown errors, use this branch:
    - local evidence triage (logs, stack trace, recent changes)
    - targeted search
    - deep research (debug-investigation) if still unresolved
    - minimal fix validation
-5. If skipping memory before search, record reason in the stage report.
-6. If intake information is missing, trigger `human-checkpoint` before deep research or planning.
+7. If compaction is detected, treat missing memory retrieval as a workflow violation and recover by reading prior Memory before continuing.
+8. If skipping memory before search outside the override cases, record reason in the stage report.
+9. If intake information is missing, trigger `human-checkpoint` before deep research or planning.
 
 ## Replanning Policy
 
