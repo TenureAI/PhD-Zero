@@ -1,6 +1,6 @@
 ---
 name: memory-manager
-description: Manage long-term AI R&D memory with retrieval, writeback, promotion, and shared export candidates. Use when preserving run state, maintaining working todo lists, reusing prior debugging/research knowledge, recording outcomes, or preparing post-task shared-memory publication.
+description: Manage long-term AI R&D memory with retrieval, writeback, promotion, and shared export candidates. Use when preserving run state, recovering prior Memory after compaction/summary steps, maintaining working todo lists, reusing prior debugging/research knowledge, recording outcomes, or preparing post-task shared-memory publication.
 ---
 
 # Memory Manager
