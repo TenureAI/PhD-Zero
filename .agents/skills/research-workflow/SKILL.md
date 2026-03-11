@@ -1,6 +1,6 @@
 ---
 name: research-workflow
-description: Run a mode-aware, evidence-driven AI R&D workflow from intake to completion for research tasks such as code/paper analysis, debugging, reproduction, planning, and iterative delivery. Use when a non-trivial research task needs structured phases, stage reporting, replanning control, and integration with run-governor, research-plan, memory-manager, deep-research, human-checkpoint, and experiment-execution.
+description: Run a mode-aware, evidence-driven AI R&D workflow from intake to completion for research tasks such as code/paper analysis, debugging, reproduction, planning, and iterative delivery. Use when a non-trivial research task needs structured phases, stage reporting, replanning control, and integration with run-governor, research-plan, memory-manager, deep-research, human-checkpoint, and experiment-execution. DO TRIGGER it when you detect your context has been compacted.
 ---
 
 # Research Workflow
