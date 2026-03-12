@@ -46,6 +46,7 @@ __pycache__/
 # Virtual env
 venv/
 .venv/
+.venv**
 env/
 
 # Packaging
