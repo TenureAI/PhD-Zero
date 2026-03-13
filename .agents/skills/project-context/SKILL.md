@@ -1,6 +1,9 @@
 ---
 name: project-context
-description: Initialize and maintain per-project private runtime context for AI R&D tasks. Collect missing env fields incrementally by task type, persist non-sensitive and sensitive values separately, and emit run snapshots for reproducibility.
+description: >-
+  Initialize and maintain per-project private runtime context for AI R&D tasks. Collect missing env fields incrementally by task type, persist non-sensitive and sensitive values separately, and emit run snapshots for reproducibility.
+  TRIGGER when starting a new research run or experiment that needs environment setup, when preflight/environment checks are needed before experiment or eval execution, when runtime fields (paths, API keys, GPU config, proxy settings) are missing during task execution, when a per-run context snapshot is needed for reproducibility, or when shared-memory retrieval/export needs project-level configuration.
+  DO NOT TRIGGER for pure research/literature investigation (use deep-research), for plan-only tasks with no execution (use research-plan), or when environment context is already fully resolved and no new fields are needed.
 ---
 
 # Project Context

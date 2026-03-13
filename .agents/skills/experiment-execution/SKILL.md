@@ -1,6 +1,9 @@
 ---
 name: experiment-execution
-description: Execute AI/ML experiments locally or remotely with explicit environment, runtime, node, and logging controls. Use when the task requires actual launch, monitoring, rerun, or recovery of experiments, and align interaction/confirmation behavior with the active run mode.
+description: >-
+  Execute AI/ML experiments locally or remotely with explicit environment, runtime, node, and logging controls. Use when the task requires actual launch, monitoring, rerun, or recovery of experiments, and align interaction/confirmation behavior with the active run mode.
+  TRIGGER when user asks to run, launch, start, resume, or monitor a training job, evaluation, or benchmark experiment, or when a research-plan is ready for execution, or when an experiment needs rerun/recovery after failure.
+  DO NOT TRIGGER for research investigation only (use deep-research), for planning without execution (use research-plan), or for environment setup without actual experiment launch (use project-context).
 ---
 
 # Experiment Execution

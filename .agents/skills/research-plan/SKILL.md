@@ -1,6 +1,9 @@
 ---
 name: research-plan
-description: Build detailed, execution-ready research plans for CS projects, papers, and experiment proposals. Use when the user wants a research proposal, experiment roadmap, study design, ablation plan, or pre-implementation planning with explicit experiments, core research questions, innovation points, codebase requirements, files, data or workload requirements, risks, and expected outcomes.
+description: >-
+  Build detailed, execution-ready research plans for CS projects, papers, and experiment proposals. Use when the user wants a research proposal, experiment roadmap, study design, ablation plan, or pre-implementation planning with explicit experiments, core research questions, innovation points, codebase requirements, files, data or workload requirements, risks, and expected outcomes.
+  TRIGGER when user asks for a research proposal, experiment plan, ablation design, evaluation roadmap, study design, or pre-implementation decomposition, or after deep-research scoping completes and findings need to be converted into an actionable plan.
+  DO NOT TRIGGER when user needs evidence gathering first (use deep-research), when user asks to actually run an experiment (use experiment-execution), or when user asks to write a paper (use paper-writing).
 ---
 
 # Research Plan

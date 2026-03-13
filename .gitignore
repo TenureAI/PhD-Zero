@@ -74,3 +74,6 @@ runs/
 
 # chore
 recording
+
+# Claude
+.claude/settings.local.json

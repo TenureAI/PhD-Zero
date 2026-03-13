@@ -1,6 +1,9 @@
 ---
 name: paper-writing
-description: Write CS/AI papers with progressive disclosure. Use only when the user explicitly asks for a paper-writing deliverable, such as drafting or revising sections like abstract, introduction, related work, method, figures, experiments, or rebuttal text. Starts from a top-level workflow and loads only the section-specific reference needed. Includes arXiv source-fetch workflow for mining LaTeX organization from exemplar papers.
+description: >-
+  Write CS/AI papers with progressive disclosure. Use only when the user explicitly asks for a paper-writing deliverable, such as drafting or revising sections like abstract, introduction, related work, method, figures, experiments, or rebuttal text. Starts from a top-level workflow and loads only the section-specific reference needed. Includes arXiv source-fetch workflow for mining LaTeX organization from exemplar papers.
+  TRIGGER when user explicitly asks to draft, write, or revise a paper, paper section (abstract, introduction, related work, method, experiments, conclusion), or rebuttal text, or asks to generate LaTeX content for a publication.
+  DO NOT TRIGGER when user mentions papers or literature but the actual need is research/investigation (use deep-research), experiment planning (use research-plan), or experiment execution (use experiment-execution).
 ---
 
 # Paper Writing
