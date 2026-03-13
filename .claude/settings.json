@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "WebFetch",
+      "WebSearch",
+      "Agent",
+      "NotebookEdit"
+    ],
+    "deny": [
+      "Bash(rm *)",
+      "Bash(rm -* *)",
+      "Bash(rmdir *)",
+      "Bash(* | rm *)",
+      "Bash(* && rm *)",
+      "Bash(* ; rm *)",
+      "Bash(shred *)",
+      "Bash(unlink *)",
+      "Bash(git clean *)",
+      "Bash(git branch -D *)",
+      "Bash(git branch -d *)",
+      "Bash(git push * --delete *)",
+      "Bash(git push * :*)"
+    ]
+  }
+}

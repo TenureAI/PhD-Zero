@@ -71,3 +71,6 @@ htmlcov/
 # Pyright
 .pyright/
 runs/
+
+# chore
+recording
