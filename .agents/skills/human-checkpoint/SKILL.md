@@ -1,9 +1,9 @@
 ---
 name: human-checkpoint
-description: >-
-  Escalate critical AI R&D decisions to a human with concise options, tradeoffs, and recommendation. Use for major safety risks, hard blockers, high-resource approvals in non-full-auto modes, shared-memory publication, or any decision with high irreversible impact.
-  TRIGGER when a decision has major safety risk, high irreversible impact, or requires human approval (e.g. large GPU spend, destructive data operations, publishing shared memory, ambiguous requirements that block progress).
-  DO NOT TRIGGER for routine confirmations already handled by run-governor mode policy, or for low-stakes reversible actions.
+description: |-
+  Escalate critical decisions to a human with options, tradeoffs, and recommendation.
+  TRIGGER when: major safety risk, high irreversible impact, large GPU spend, destructive data ops, shared-memory publication, or hard blockers requiring human approval.
+  DO NOT TRIGGER when: routine confirmations handled by run-governor, or low-stakes reversible actions.
 ---
 
 # Human Checkpoint

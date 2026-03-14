@@ -1,9 +1,9 @@
 ---
 name: deep-research
-description: >-
-  Conduct deep, evidence-first research for complex questions using broad discovery, verification, contradiction checks, and traceable citations. Use for idea exploration, debugging investigations, design decisions, implementation strategy, and conflict resolution. Adapt the report template by research type while keeping rigorous sourcing and depth.
-  TRIGGER when user message contains research-intent signals (Chinese or English) such as 调研/研究/对比/综述/文献/证据/机制/根因/为什么/可行性/路线图, or research/investigate/compare/survey/literature/evidence/mechanism/root-cause/why/feasibility/roadmap, or asks to explore ideas, verify claims, analyze tradeoffs, scope a new topic, or conduct a literature review. Also TRIGGER mid-run when new research-intent signals appear in a follow-up message.
-  DO NOT TRIGGER when user explicitly asks for a paper-writing deliverable (use paper-writing), or only needs a concrete experiment launched (use experiment-execution), or asks for a structured plan without needing new evidence gathering (use research-plan).
+description: |-
+  Deep evidence-first research with broad discovery, verification, and traceable citations. Prefer invoking via research-workflow.
+  TRIGGER when (MANDATORY — you MUST invoke this skill, no exceptions): user message contains ANY of these keywords or synonyms — 调研/研究/对比/综述/文献/证据/机制/根因/为什么/可行性/路线图/分析/探索, or research/investigate/compare/survey/literature/evidence/mechanism/root-cause/why/feasibility/roadmap/analyze/explore — or asks to verify claims, analyze tradeoffs, scope a new topic, or conduct literature review. Also MUST trigger mid-run when new research-intent signals appear. If in doubt whether to trigger, trigger. Skipping when keywords match is a routing violation.
+  DO NOT TRIGGER when: user asks for paper-writing output (use paper-writing), experiment launch (use experiment-execution), or plan-only without evidence (use research-plan).
 ---
 
 # Deep Research

@@ -1,9 +1,9 @@
 ---
 name: memory-manager
-description: >-
-  Manage long-term AI R&D memory with retrieval, writeback, promotion, and shared export candidates. Use when preserving run state, recovering prior Memory after compaction/summary steps, maintaining working todo lists, reusing prior debugging/research knowledge, recording outcomes, or preparing post-task shared-memory publication.
-  TRIGGER when starting a non-trivial run (bootstrap retrieve), when completing a task (close-out writeback), on stage change or replan, on significant failure or new error signature, before high-resource actions, before final report handoff, or when compaction/summary markers (Compact, 压缩, Summary) are detected in context.
-  DO NOT TRIGGER more than once per cycle unless forced by safety/failure/high-resource triggers (see cooldown rules in CLAUDE.md).
+description: |-
+  Manage long-term AI R&D memory: retrieval, writeback, promotion, and shared export.
+  TRIGGER when: run bootstrap (retrieve), task completion (writeback), stage change, replan, significant failure, before high-resource action, before final report, or compaction markers detected (Compact/压缩/Summary).
+  DO NOT TRIGGER when: already called this cycle (cooldown), unless forced by safety/failure/high-resource triggers.
 ---
 
 # Memory Manager

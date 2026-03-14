@@ -1,9 +1,9 @@
 ---
 name: run-governor
-description: >-
-  Govern run-level execution policy for AI research tasks, including interaction mode selection, run_id creation, directory layout, stage reporting, and per-run safety allowances. Use when starting or switching a research run, defining how often to ask the user, handling high-resource actions, or deciding whether to continue within the same run vs start a new run.
-  TRIGGER when starting any non-trivial research task (to set mode and run_id), when switching execution targets (local/remote), when a new run needs to be created, or when stage reporting or mode-aware policy decisions are needed.
-  DO NOT TRIGGER for trivial single-step tasks, for pure information queries, or when a run is already initialized and no mode/policy change is needed.
+description: |-
+  Govern run-level execution policy: mode selection, run_id, directory layout, stage reporting, safety allowances.
+  TRIGGER when: starting a non-trivial research task (set mode + run_id), switching local/remote target, creating a new run, or mode-aware policy decisions needed.
+  DO NOT TRIGGER when: trivial single-step tasks, pure info queries, or run already initialized with no policy change needed.
 ---
 
 # Run Governor
