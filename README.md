@@ -28,7 +28,7 @@ See PhD-Zero in action! We provide end-to-end demonstrations of how our research
 Watch PhD-Zero autonomously investigate how different prompting tricks affect the reasoning capabilities of models. The agent handles everything from literature review and experiment design to execution and report generation.
 
 <div align="center">
-  <img src="./demos/phd_zero_demo_e2e_prompting_tricks.gif" alt="End-to-End Research Demo" width="90%">
+  <img src="./demos/phd_zero_demo_e2e_prompting_tricks.gif" alt="End-to-End Research Demo" width="80%">
 </div>
 
 📄 **Read the generated report:** [phd_zero_report_e2e_prompting_tricks_v0_0316.pdf](./demos/phd_zero_report_e2e_prompting_tricks_v0_0316.pdf)
