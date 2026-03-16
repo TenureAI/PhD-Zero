@@ -27,9 +27,7 @@ See PhD-Zero in action! We provide end-to-end demonstrations of how our research
 ### 1. End-to-End Research: Exploring Prompting Tricks on Model Reasoning
 Watch PhD-Zero autonomously investigate how different prompting tricks affect the reasoning capabilities of models. The agent handles everything from literature review and experiment design to execution and report generation.
 
-<video src="./demos/phd_zero_demo_e2e_prompting_tricks_v0_0316_480p.mov" controls="controls" width="100%"></video>
-
-*(If standard playback doesn't work, [click here to view the video directly on GitHub](https://github.com/TenureAI/PhD-Zero/blob/main/demos/phd_zero_demo_e2e_prompting_tricks_v0_0316_480p.mov)).*
+![End-to-End Research Demo](./demos/phd_zero_demo_e2e_prompting_tricks.gif)
 
 📄 **Read the generated report:** [phd_zero_report_e2e_prompting_tricks_v0_0316.pdf](./demos/phd_zero_report_e2e_prompting_tricks_v0_0316.pdf)
 

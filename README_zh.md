@@ -27,9 +27,7 @@ PhD-Zero 是一个可复用 research skills 仓库。它的目标不是让 agent
 ### 1. 端到端研究：探究 Prompting Tricks 对模型推理能力的影响
 观看 PhD-Zero 利用 Claude 端到端自主推进研究，探究不同的提示词技巧（Prompting Tricks）如何影响模型的推理能力。智能体能够独立处理从文献调研、实验设计到代码执行与最终报告生成的全部流程！
 
-<video src="./demos/phd_zero_demo_e2e_prompting_tricks_v0_0316_480p.mov" controls="controls" width="100%"></video>
-
-*(如果视频没能自动显示，你可以 [点击此处在 GitHub 网页上直接观看原始文件](https://github.com/TenureAI/PhD-Zero/blob/main/demos/phd_zero_demo_e2e_prompting_tricks_v0_0316_480p.mov))*
+![End-to-End Research Demo](./demos/phd_zero_demo_e2e_prompting_tricks.gif)
 
 📄 **阅读 AI 生成的完整研究报告:** [phd_zero_report_e2e_prompting_tricks_v0_0316.pdf](./demos/phd_zero_report_e2e_prompting_tricks_v0_0316.pdf)
 
