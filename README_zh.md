@@ -29,8 +29,6 @@ PhD-Zero 是一个可复用 research skills 仓库。它的目标不是让 agent
 
 <video src="https://github.com/TenureAI/PhD-Zero/raw/main/demos/phd_zero_demo_e2e_prompting_tricks_v0_0316_480p.mov" controls="controls" width="100%"></video>
 
-视频也可直接点击播放/下载：[点击观看视频](./demos/phd_zero_demo_e2e_prompting_tricks_v0_0316_480p.mov)
-
 📄 **阅读 AI 生成的完整研究报告:** [phd_zero_report_e2e_prompting_tricks_v0_0316.pdf](./demos/phd_zero_report_e2e_prompting_tricks_v0_0316.pdf)
 
 ### 2. 优化 Qwen3-1.7b-base 在 AIME25 上的表现

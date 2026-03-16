@@ -29,8 +29,6 @@ Watch PhD-Zero autonomously investigate how different prompting tricks affect th
 
 <video src="https://github.com/TenureAI/PhD-Zero/raw/main/demos/phd_zero_demo_e2e_prompting_tricks_v0_0316_480p.mov" controls="controls" width="100%"></video>
 
-Also available as a direct link: [Watch Video](./demos/phd_zero_demo_e2e_prompting_tricks_v0_0316_480p.mov)
-
 📄 **Read the generated report:** [phd_zero_report_e2e_prompting_tricks_v0_0316.pdf](./demos/phd_zero_report_e2e_prompting_tricks_v0_0316.pdf)
 
 ### 2. Optimizing Qwen3-1.7b-base on AIME25
