@@ -28,7 +28,13 @@ PhD-Zero 是一个可复用 research skills 仓库。它的目标不是让 agent
 观看 PhD-Zero 利用 Claude 端到端自主推进研究，探究不同的提示词技巧（Prompting Tricks）如何影响模型的推理能力。智能体能够独立处理从文献调研、实验设计到代码执行与最终报告生成的全部流程！
 
 <div align="center">
-  <img src="./demos/phd_zero_demo_e2e_prompting_tricks.gif" alt="End-to-End Research Demo" width="80%">
+  <img src="./demos/phd_zero_demo_e2e_prompting_tricks.gif" alt="End-to-End Research Demo" width="90%">
+</div>
+
+>*以下统计结果和全流程均为 PhD-Zero 独立自主完成：通过 `deep-research` skill 发散和调研 ideas，在后台独立执并跑通了多个控制变量实验，自主分析实验结果量化数据，并最终基于这些数据结论撰写了完整的探究报告。*
+
+<div align="center">
+  <img src="./demos/phd_zero_demo_e2e_prompting_tricks_accuracy.png" alt="Accuracy Ranking Figure" width="90%">
 </div>
 
 📄 **阅读 AI 生成的完整研究报告:** [phd_zero_report_e2e_prompting_tricks_v0_0316.pdf](./demos/phd_zero_report_e2e_prompting_tricks_v0_0316.pdf)
