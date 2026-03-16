@@ -141,3 +141,10 @@ If PhD-Zero is useful in your workflow or research, you can cite it as:
   note         = {GitHub repository}
 }
 ```
+
+## Community
+
+<div align="center">
+  <img src="./assets/wechat-discuss.png" alt="WeChat Discussion Group" width="300" />
+</div>
+

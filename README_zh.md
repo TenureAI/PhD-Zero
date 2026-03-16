@@ -141,3 +141,10 @@ PhD-Zero 的形成受到了 coding agents、research tooling 和写作辅助生�
   note         = {GitHub repository}
 }
 ```
+
+## 交流群
+
+<div align="center">
+  <img src="./assets/wechat-discuss.png" alt="WeChat Discussion Group" width="300" />
+</div>
+
