@@ -77,3 +77,4 @@ recording
 
 # Claude
 .claude/settings.local.json
+experiments

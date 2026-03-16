@@ -46,6 +46,7 @@ Before producing any substantive response, you MUST run this mental checklist:
 13. Prefer small, reversible, verifiable steps over broad speculative changes.
 14. Follow `REPO_CONVENTIONS.md` for artifact placement and commit hygiene.
 15. If a run was initialized before confirmation, stop and run violation recovery: acknowledge, ask whether to keep/clean artifacts, and wait for explicit reconfirmation before continuing.
+16. **Mandatory Visualization**: Every report with quantitative results MUST include code-generated visualizations (matplotlib). Always generate figures when writing stage reports or final reports. If the report is complex, invoke `paper-writing` for polished formatting. Under-visualizing is a violation.
 
 ## Memory Invocation Guardrails (Balanced)
 1. `memory-manager` is mandatory for non-trivial runs, but only as a control-plane step, not per command.

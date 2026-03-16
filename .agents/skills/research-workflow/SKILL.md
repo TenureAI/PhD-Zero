@@ -142,6 +142,20 @@ At each stage completion or major todo completion:
 4. Do not block execution only because a stage report was emitted.
 5. If the stage delivers data-analysis results, include visualization outputs and saved figure paths (default: `<codex-cwd>/logs/runs/<run_id>/reports/figures/`).
 
+## Mandatory Visualization Policy
+
+**Every report that presents quantitative results MUST include visualizations. This is non-negotiable.**
+
+1. When writing any report (stage report, final report, evaluation summary) that contains numerical results, tables, or comparisons, you MUST generate matplotlib/code-based figures before finalizing the report.
+2. At minimum, generate:
+   - A **ranking/comparison chart** (bar chart) when multiple strategies, methods, or configurations are compared.
+   - A **breakdown chart** (grouped bar or heatmap) when per-category/per-subject/per-level data is available.
+   - A **trend/line chart** when results vary across an ordered dimension (difficulty level, training step, etc.).
+3. Save all figures to `<codex-cwd>/logs/runs/<run_id>/reports/figures/` and embed them in the report markdown with relative paths.
+4. Prefer code-generated assets (matplotlib, seaborn) that can be regenerated. Save the generation script alongside the figures.
+5. If the report scope is large or the visualizations need polished formatting, invoke `Skill(skill: "paper-writing")` to handle the report writing and figure integration.
+6. If you are unsure whether a report needs visualization, it does. Over-visualizing is acceptable; under-visualizing is a violation.
+
 ## Shared Memory Export Gate
 
 Do not export shared memory during core task execution.
