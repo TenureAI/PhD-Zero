@@ -20,6 +20,22 @@ PhD-Zero is a repository of reusable skills for AI research work. The point is n
 
 The same skill library is exposed to different runtimes. Codex-style agents read workspace rules from `AGENTS.md`. Claude Code sees a mirrored discovery layer under `.claude/skills/`. The actual source of truth lives in `.agents/skills/`.
 
+## 🔥 Demos & Showcases
+
+See PhD-Zero in action! We provide end-to-end demonstrations of how our research-oriented OS empowers autonomous AI agents to conduct complex research tasks.
+
+### 1. End-to-End Research: Exploring Prompting Tricks on Model Reasoning
+Watch PhD-Zero autonomously investigate how different prompting tricks affect the reasoning capabilities of models. The agent handles everything from literature review and experiment design to execution and report generation.
+
+<video src="./demos/phd_zero_demo_e2e_prompting_tricks_v0_0316_480p.mov" controls="controls" width="100%"></video>
+
+📄 **Read the generated report:** [phd_zero_report_e2e_prompting_tricks_v0_0316.pdf](./demos/phd_zero_report_e2e_prompting_tricks_v0_0316.pdf)
+
+### 2. Optimizing Qwen3-1.7b-base on AIME25
+Watch PhD-Zero autonomously optimize a foundational model's performance on the notoriously challenging AIME25 mathematics benchmark! By systematically experimenting with different datasets (`numina-math`, `open-r1`), training algorithms (SFT, RL), and exploring training tricks like learning rate tuning and rigorous data filtering, the agent successfully skyrocketed the accuracy of Qwen3-1.7B-base from **0% to an impressive 20%**!
+
+![Optimizing Qwen3 on AIME25](./demos/phd_zero_demo_training.png)
+
 ## Quick start
 
 If you just want to see whether the repo is wired correctly, do this:

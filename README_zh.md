@@ -20,6 +20,22 @@ PhD-Zero 是一个可复用 research skills 仓库。它的目标不是让 agent
 
 同一套 skills 会暴露给不同 runtime。Codex 风格 agent 主要通过 `AGENTS.md` 读取工作区规则，Claude Code 通过 `.claude/skills/` 发现镜像层，真正的 source of truth 统一放在 `.agents/skills/`。
 
+## 🔥 Demos & Showcases (演示与案例)
+
+快来一睹 PhD-Zero 的实际威力！我们提供了端到端的演示，展示了这个以研究为导向的操作系统是如何赋能 AI 智能体，让其自主进行复杂的研究任务的。
+
+### 1. 端到端研究：探究 Prompting Tricks 对模型推理能力的影响
+观看 PhD-Zero 利用 Claude 端到端自主推进研究，探究不同的提示词技巧（Prompting Tricks）如何影响模型的推理能力。智能体能够独立处理从文献调研、实验设计到代码执行与最终报告生成的全部流程！
+
+<video src="./demos/phd_zero_demo_e2e_prompting_tricks_v0_0316_480p.mov" controls="controls" width="100%"></video>
+
+📄 **阅读 AI 生成的完整研究报告:** [phd_zero_report_e2e_prompting_tricks_v0_0316.pdf](./demos/phd_zero_report_e2e_prompting_tricks_v0_0316.pdf)
+
+### 2. 优化 Qwen3-1.7b-base 在 AIME25 上的表现
+见证 PhD-Zero 如何在极具挑战的 AIME25 数学基准集上自主完成模型优化闭环！智能体系统性地尝试了多种数据集（`numina-math`、`open-r1`），对比了不同的训练算法（SFT、RL），并探索了学习率调整、数据过滤等进阶调参技巧。最终，成功将 Qwen3-1.7B-base 模型的准确率 **从 0% 大幅跃升至 20%**！
+
+![Optimizing Qwen3 on AIME25](./demos/phd_zero_demo_training.png)
+
 ## 快速开始
 
 如果你只是想先确认这个仓库的 skill 层是通的，直接跑下面几条命令：
