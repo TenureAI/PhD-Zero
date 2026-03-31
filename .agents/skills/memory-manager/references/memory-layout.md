@@ -7,6 +7,8 @@ Use this layout during research execution:
   working/
     state.yaml
     todo.yaml
+  actions/
+    <action_id>.yaml
   reports/
     index.md
     stage-*.md
@@ -34,3 +36,4 @@ Notes:
 2. Keep long-term memory in `.project_local/<project_slug>/memory/` plus index metadata in `index.db`.
 3. Treat old `memory/` and `.agent/memory.db` layouts as legacy and migrate when touched.
 4. Shared memory repos live outside `.project_local` and are treated as read-only retrieval sources, not as run-scoped state.
+5. Long-running action records in `actions/` are part of continuity recovery and should be considered when rebuilding `working`.

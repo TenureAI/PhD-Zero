@@ -66,14 +66,81 @@ If setup is clear and safe, direct execution is allowed.
 4. Resolve only blocking gaps.
 5. Launch smallest valid step first when uncertainty is high.
 6. Record commands, node assignments, log paths, run IDs.
-7. Replan on major failures.
+7. If the launched action is long-running, immediately enter watch mode instead of treating launch as completion.
+8. After each poll, continue with monitoring, diagnosis, recovery, or result collection; do not default to "job started, come back later."
+9. Replan on major failures.
+
+## Watch Mode Policy
+
+Long-running experiment execution is an active responsibility, not a fire-and-forget step.
+
+After launching a long-running job:
+
+1. stay in watch mode by default
+2. poll logs, checkpoints, scheduler state, or metrics on a model-chosen cadence
+3. after each poll:
+   - if `running`, choose the next sleep interval and continue watching
+   - if `completed`, inspect outputs and continue validation/analysis
+   - if `stalled`, inspect evidence, retrieve memory, and attempt recovery or replan
+   - if `failed`, diagnose immediately and attempt the smallest safe recovery
+4. ask the user only for hard blockers, major safety/resource approvals, or true decision points
+5. only allow explicit fire-and-forget behavior when the user clearly requested it
+
+## Watch-Loop Execution Template
+
+Use this template after each experiment poll:
+
+1. read `status`, `followup_action`, `progress_changed`, and `last_log_tail`
+2. branch immediately:
+   - `continue-watch` or `wait-and-poll`
+     - choose the next sleep interval
+     - keep monitoring
+   - `collect-results`
+     - inspect outputs, metrics, checkpoints, and artifacts
+     - continue validation and analysis
+   - `diagnose-stall`
+     - inspect logs
+     - retrieve `procedure` and `episode`
+     - attempt the smallest safe recovery
+   - `diagnose-failure`
+     - inspect failure evidence
+     - retrieve memory
+     - attempt recovery or replan
+   - `replan`
+     - update route and continue execution
+3. write working state update before the next wait or recovery attempt
+4. do not stop at "job is still running" unless fire-and-forget was explicitly requested
+
+## Short Iterative Evaluation Loop
+
+Short local edit-and-evaluate cycles must be handled as an owned execution loop, not as a one-shot task.
+
+When the task is iterative optimization:
+
+1. compile an evaluation ladder:
+   - baseline or previous-best reference
+   - primary regression set
+   - promotion gate for larger evaluation
+   - final target evaluation
+2. prefer broader representative sets over a few hand-picked cases
+3. after each batch:
+   - run the current gate set
+   - compare score against baseline and best-so-far
+   - inspect regressions, not just aggregate score
+   - decide `iterate`, `replan`, or `promote-to-next-gate`
+4. if the new result is the best-so-far and the user requested preservation, snapshot the relevant prompt/config/code/results before the next risky change
+5. if the current gate is unmet, do not stop merely because one iteration completed cleanly
+6. only hand back to the user when:
+   - compiled targets are met
+   - a true hard blocker remains
+   - a safety/resource gate requires approval
 
 ## Unknown Error Branch
 
 When execution fails with unknown error:
 
 1. local evidence triage (stack, logs, env, recent diffs)
-2. optional memory retrieval if likely useful
+2. retrieve relevant `procedure` and `episode` memory
 3. targeted search
 4. deep research (debug-investigation) if unresolved
 5. apply smallest fix and validate
@@ -97,6 +164,7 @@ Record stable paths for:
 4. artifacts
 
 On failures, record owner and cleanup plan.
+On stalled jobs, record recovery attempt and next watch step.
 
 ## Data Analysis Visualization Policy
 
@@ -114,6 +182,7 @@ Do not launch full run when required inputs are still unknown and not explicitly
 
 In `full-auto`, continue only if risk is acceptable and no major safety issue exists.
 In `full-auto`, if remote profile is complete, reuse it by default unless explicitly overridden.
+For iterative optimization tasks, do not stop after a single batch while the active evaluation gate or non-regression guard is still unmet.
 
 ## Output Contract
 
@@ -146,4 +215,9 @@ analysis_artifacts:
   figures: <list of saved figure paths>
 next_action: <smallest safe step>
 checkpoint_needed: <yes|no>
+goal_status:
+  primary_target: <target>
+  active_gate: <current threshold or eval set>
+  best_so_far: <metric summary>
+  done_allowed: <yes|no>
 ```

@@ -1,4 +1,4 @@
 interface:
   display_name: "Research Workflow"
-  short_description: "Mode-aware evidence loop for AI R&D execution."
-  default_prompt: "Use research workflow to understand requirements, plan, execute with working todo tracking, replan on major issues, and emit stage reports."
+  short_description: "Durable evidence loop for AI R&D execution with long-action polling and experience retrieval."
+  default_prompt: "Use research workflow to understand requirements, compile the user request into machine-checkable success criteria, promotion gates, non-regression guards, and done guards, then retrieve prior experience aggressively, route external search through deep research, and keep ownership until those compiled gates are satisfied or a true blocker remains. Treat short edit-evaluate loops with the same persistence as long-running actions. In watch mode always branch on followup_action: continue-watch or wait-and-poll means choose the next sleep and keep ownership; collect-results means inspect outputs immediately and validate against the compiled gates; diagnose-stall or diagnose-failure means inspect evidence, retrieve memory, and attempt the smallest safe recovery; replan means update the route and continue execution. Write working deltas, replan on major issues, and do not mark done while the active gate is unmet."

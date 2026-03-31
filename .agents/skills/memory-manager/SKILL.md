@@ -2,15 +2,15 @@
 name: memory-manager
 description: |-
   Manage long-term AI R&D memory: retrieval, writeback, promotion, and shared export.
-  TRIGGER when: run bootstrap (retrieve), task completion (writeback), stage change, replan, significant failure, before high-resource action, before final report, or compaction markers detected (Compact/压缩/Summary).
-  DO NOT TRIGGER when: already called this cycle (cooldown), unless forced by safety/failure/high-resource triggers.
+  TRIGGER when: run bootstrap, each new user turn, each execution batch, significant failure, replan, high-resource action, long-action resume, final report handoff, or compaction markers detected (Compact/压缩/Summary).
+  DO NOT TRIGGER when: the exact same retrieval was just performed, freshness is still valid, and no new objective/stage/error signal appeared.
 ---
 
 # Memory Manager
 
 ## Mission
 
-Build compounding capability by turning execution traces into reusable, evidence-linked memory.
+Build compounding capability by turning execution traces into reusable, evidence-linked memory, with retrieval centered on prior experience rather than only current working state.
 
 ## Load References
 
@@ -24,11 +24,19 @@ Load these files before writing or promoting records:
 
 Manage these layers:
 
-1. `working`: run-scoped current state and todo tracking.
-2. `episode`: concrete run case record.
-3. `procedure`: reusable SOP from repeated success.
-4. `insight`: cross-task abstraction with boundaries.
-5. `persona`: behavior config only.
+1. `working`
+   - run-scoped continuity state
+   - resume after compaction, interruption, or long waits
+2. `episode`
+   - concrete run case records
+   - useful for similar errors, repeated attempts, and local history
+3. `procedure`
+   - highest-priority execution memory
+   - default retrieval layer before acting
+4. `insight`
+   - cross-task abstraction, tradeoffs, boundaries, and contradiction handling
+5. `persona`
+   - behavior config only
 
 ## Working Memory Contract
 
@@ -42,25 +50,47 @@ Manage these layers:
 6. `next_step`
 7. `blockers`
 8. `evidence_refs`
-9. `todo_active`
-10. `todo_done`
-11. `todo_blocked`
+9. `active_action_ids`
+10. `todo_active`
+11. `todo_done`
+12. `todo_blocked`
 
 Todo granularity should be task-level (small stages/subtasks), not command-level.
 
-## Retrieval Policy
+## Experience-First Retrieval Policy
 
-Retrieve early when useful, but do not block execution:
+Prior experience retrieval is the default. `working` is important for continuity, but it is not the only retrieval path and should not crowd out reusable experience.
 
-1. Query by `project`, `task_type`, `error_signature` first.
-2. Upgrade retrieval from optional to mandatory before continuing when either of these triggers is present:
-   - you are modifying `memory-manager` or another Memory-related skill/instruction
-   - a status, state, or context file contains compaction markers such as `Compact`, `压缩`, `Summary`, or similar summary/compression techniques
-3. In mandatory-retrieval cases, read prior Memory first and treat the result as required context recovery rather than a best-effort lookup.
-4. Add tags and FTS when exact filters miss.
-5. Prefer `active` procedures/insights when confidence is similar.
-6. Flag stale entries with low confidence.
-7. If retrieval is low-yield and task is time-sensitive, continue with search/deep research directly only when the mandatory-retrieval triggers are absent.
+Mandatory retrieval triggers:
+
+1. every new user turn
+2. every execution batch before acting
+3. every replan
+4. every significant failure or new error signature
+5. every high-resource or irreversible action
+6. every long-action resume or post-poll decision
+7. before final answer or report handoff
+8. when modifying `memory-manager` or another Memory-related skill/instruction
+9. when compaction markers such as `Compact`, `压缩`, or `Summary` appear
+
+Default retrieval order:
+
+1. `procedure`
+   - mandatory before every execution batch
+2. `episode`
+   - mandatory when a similar failure, repeated attempt, or same task type is present
+3. `insight`
+   - mandatory during planning, tradeoff analysis, contradiction handling, or final answer shaping
+4. `working`
+   - mandatory for resume, compaction recovery, long-action reconciliation, and final handoff
+
+Query strategy:
+
+1. query by `project`, `task_type`, `error_signature`, and stage first
+2. add tags and FTS when exact filters miss
+3. prefer `active` procedures/insights when confidence is similar
+4. prefer recent local episodes over shared memory unless local retrieval is clearly low-yield
+5. if retrieval is low-yield, keep going, but record `memory_skip_reason` or `memory_low_yield_reason`
 
 ## Shared Retrieval Policy
 
@@ -80,13 +110,15 @@ Treat shared memory as an optional read-only source, not as project-local memory
 
 ## Writeback Policy
 
-Write conservatively and continuously:
+Write conservatively, but more frequently than before:
 
-1. Update `working` on each meaningful state transition.
-2. Write `episode` at milestones, major failure, replan, or human intervention.
-3. Create `procedure` draft after repeated successful pattern.
-4. Create `insight` draft after cross-task recurring evidence.
-5. Store evidence pointers, not narrative only.
+1. write a concise `working` delta after every execution batch
+2. write a concise `working` delta after every long-action poll cycle that changes status or next step
+3. write `episode` at milestones, major failure, replan, or human intervention
+4. create `procedure` draft after repeated successful pattern or validated recovery workflow
+5. create `insight` draft after cross-task recurring evidence
+6. store evidence pointers, not narrative only
+7. when a completed long-running action produces results that affect later decisions, record the result summary before leaving watch mode
 
 ## Error-Resolution Memory
 
@@ -98,124 +130,123 @@ For significant errors, capture:
 4. observed outcomes
 5. final fix (if any)
 6. unresolved hypotheses
+7. retrieved procedures/episodes that influenced the fix
 
 ## Working Freshness Rules
 
-Treat stale working state as risk:
+Treat stale continuity state as risk:
 
-1. Refresh after plan changes, tool-call batches, or diagnosis updates.
-2. Review at least every 15 minutes in active execution.
-3. Force review before high-resource actions.
-4. Force review after interruptions or unexpected failures.
+1. refresh after plan changes, tool-call batches, or diagnosis updates
+2. refresh after long-action polls that change status
+3. review at least every 15 minutes in active execution
+4. force review before high-resource actions
+5. force review after interruptions or unexpected failures
 
-## Invocation Schedule (Balanced, Non-Aggressive)
+## Invocation Schedule (Experience-First, Frequent but Targeted)
 
 1. Mandatory once-per-run operations:
    - bootstrap `retrieve/init-working` after intake and before planning/execution
    - close-out writeback before final task completion
-2. Trigger-based operations between bootstrap and close-out:
-   - stage transition
-   - replan
-   - significant failure or new error signature
-   - before high-resource action
-   - before final answer/report handoff
-3. Periodic `working` refresh is required when either is true:
-   - at least 15 minutes since last memory operation
-   - at least 3 execution cycles since last memory operation
-4. Cooldown:
-   - no more than one non-forced memory operation per cycle
-   - skip when state delta is negligible
-5. Anti-overuse policy:
-   - do not write memory after every command/tool call
-   - prefer compact delta updates over full rewrites
-   - skip repeated retrieval if last retrieval is fresh and task/error signature is unchanged
-6. Command-gap fallback:
-   - if 5 consecutive commands/actions complete without a memory update, force one `working` refresh.
-   - treat this as a low-cost sync update (delta-first, concise).
-7. When skipped, log `memory_skip_reason` for auditability.
+2. Mandatory per-turn operations:
+   - retrieve relevant experience on every new user turn
+3. Mandatory per-batch operations:
+   - retrieve `procedure` before every execution batch
+   - write `working` delta after every execution batch
+4. Mandatory trigger-based operations:
+   - retrieve `episode` on problem, failure, repeated attempt, or new error signature
+   - retrieve `insight` on planning/replanning/tradeoff/final answer
+   - retrieve `procedure` plus `episode` before high-resource actions
+   - reread `working` during resume, compaction recovery, long-action reconciliation, and final handoff
+   - retrieve `procedure` plus `episode` immediately after stalled or failed poll outcomes
+   - retrieve `insight` after completed poll outcomes when interpretation or next-step selection is needed
+5. Cooldown:
+   - skip only duplicate retrievals when objective, stage, and error signature are unchanged and the same hit set is still fresh
+   - cooldown does not suppress a new-trigger retrieval
+6. When skipped, log `memory_skip_reason` for auditability.
 
 ## Post-Compression Recovery (Required)
 
 When memory is auto-compressed/summarized:
 
-1. Immediately run a `working` re-read before the next execution step.
-2. Rebuild `working` fields from recent evidence:
+1. immediately run a `working` reread before the next execution step
+2. rebuild `working` fields from recent evidence:
    - latest stage report
    - latest action/observation logs
    - latest todo diff (`todo_active/todo_done/todo_blocked`)
-3. Publish a compact "post-compression state snapshot" and continue only after snapshot is consistent.
+   - active long-action records
+3. publish a compact post-compression state snapshot and continue only after snapshot is consistent
 
 ## Layered Retrieval Timing
 
-Use layer-specific retrieval timing to avoid over-calling:
+Use layer-specific timing to keep retrieval frequent but useful:
 
-1. `working` retrieve:
-   - mandatory bootstrap
-   - periodic refresh by Invocation Schedule
-   - mandatory after memory compression
+1. `procedure` retrieve:
+   - before every execution batch
+   - before high-resource or irreversible actions
+   - after stalled or failed background jobs
 2. `episode` retrieve:
    - at run start for same project/task_type
-   - at replan or major failure to avoid repeating failed paths
-3. `procedure` retrieve:
-   - before executing a new stage plan
-   - before high-resource or irreversible actions
-   - when repeated failure indicates a known SOP may exist
-4. `insight` retrieve:
+   - at replan or major failure
+   - when repeated failure indicates recent local history may help
+3. `insight` retrieve:
    - during planning/replanning for hypothesis shaping
    - when evidence conflicts or root cause is unclear
-   - before final report/answer to run contradiction/boundary checks
+   - before final report/answer to run boundary checks
+4. `working` retrieve:
+   - bootstrap
+   - resume/reconcile
+   - after memory compression
+   - before final handoff
 5. `persona` retrieve:
    - once at run start
    - on interaction mode switch or explicit user preference change
-   - before final user-facing delivery for style/alignment consistency
-6. Retrieval cooldown:
-   - `procedure/insight/persona` at most once per stage unless a new trigger appears.
+   - before final user-facing delivery
 
 ## Recovery on Context Drift
 
 If execution becomes repetitive or confused:
 
-1. Rebuild working state from action and observation logs.
-2. Run targeted retrieval by project/task/error signature.
-3. If drift followed a compaction step or summary-style recovery, read prior Memory before publishing or trusting a compact state summary.
-4. Publish compact state summary before continuing.
+1. rebuild working state from action and observation logs
+2. run targeted retrieval by project/task/error signature
+3. if drift followed compaction or summary-style recovery, read prior Memory before publishing or trusting a compact state summary
+4. publish compact state summary before continuing
 
 ## Compaction Recovery Policy
 
 When context may have been compressed:
 
-1. Inspect available status/state/context files for markers such as `Compact`, `压缩`, `Summary`, or equivalent summary/compression techniques.
-2. If any marker is present, call `memory-manager` to read prior Memory before editing instructions, planning next actions, or resuming execution.
-3. If prior Memory cannot be read, treat that as an active blocker because key context may be missing.
-4. Record the compaction trigger and retrieval result in working state or the next stage report.
+1. inspect available status/state/context files for markers such as `Compact`, `压缩`, `Summary`, or equivalent summary/compression techniques
+2. if any marker is present, call `memory-manager` to read prior Memory before editing instructions, planning next actions, or resuming execution
+3. if prior Memory cannot be read, treat that as an active blocker because key context may be missing
+4. record the compaction trigger and retrieval result in working state or the next stage report
 
 ## Promotion Policy
 
 Promote only with evidence:
 
-1. `procedure draft -> active` after successful reuse and stable boundaries.
-2. `insight draft -> active` after multi-episode support.
-3. Require human review for safety-critical or expensive procedures.
-4. Deprecate entries when contradictions accumulate.
+1. `procedure draft -> active` after successful reuse and stable boundaries
+2. `insight draft -> active` after multi-episode support
+3. require human review for safety-critical or expensive procedures
+4. deprecate entries when contradictions accumulate
 
 ## Shared Export Policy
 
 Treat shared export as post-task work:
 
-1. Do not export during main task execution.
-2. Export only verified/high-value records.
-3. Never export noisy `working` state.
-4. Require `human-checkpoint` before publishing.
-5. Sync the shared repo before export so dedupe/conflict checks run against the latest branch tip.
+1. do not export during main task execution
+2. export only verified/high-value records
+3. never export noisy `working` state
+4. require `human-checkpoint` before publishing
+5. sync the shared repo before export so dedupe/conflict checks run against the latest branch tip
 
 ## Shared Repository Contract
 
 When exporting:
 
-1. Target `https://github.com/TenureAI/open-research-memory`.
-2. Use pull-based flow: local export -> `codex/*` branch -> PR -> review -> merge.
-3. Never push directly to `main`.
-4. Enforce schema and required sections.
+1. target `https://github.com/TenureAI/open-research-memory`
+2. use pull-based flow: local export -> `codex/*` branch -> PR -> review -> merge
+3. never push directly to `main`
+4. enforce schema and required sections
 
 ## Shared Retrieval Helper
 
@@ -235,9 +266,11 @@ python3 .agents/skills/memory-manager/scripts/shared_memory_retrieval.py \
 For each memory operation, emit:
 
 1. `Run`
-2. `Action` (retrieve/write/promote/deprecate/export)
+2. `Action` (`retrieve|write|promote|deprecate|export`)
 3. `Target`
-4. `Rationale`
-5. `Evidence`
-6. `Result`
-7. `Trigger` (`bootstrap|stage-change|replan|error|high-resource|periodic|close-out`)
+4. `Layers`
+5. `Rationale`
+6. `Query`
+7. `Hits`
+8. `Working Update`
+9. `memory_skip_reason` when applicable

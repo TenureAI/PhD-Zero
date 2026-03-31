@@ -1,4 +1,4 @@
 interface:
   display_name: "Experiment Execution"
   short_description: "Run experiments with mode-aware validation and traceable outputs."
-  default_prompt: "Use experiment execution to launch local/remote runs with run_id paths, conditional smoke checks, and evidence-backed error recovery."
+  default_prompt: "Use experiment execution to launch local or remote runs with run_id paths, conditional smoke checks, and evidence-backed error recovery. For iterative optimization tasks, compile an evaluation ladder with baseline, active regression gate, promotion gate, and final target, compare each batch against baseline and best-so-far, preserve strong variants when requested, and keep iterating until the active gate is satisfied or a true blocker remains. For long-running jobs, stay in watch mode and branch on followup_action: continue-watch or wait-and-poll means choose the next sleep interval and keep monitoring; collect-results means inspect outputs and continue validation against the compiled gates; diagnose-stall or diagnose-failure means inspect evidence, retrieve memory, and attempt the smallest safe recovery; replan means update the route and continue."
