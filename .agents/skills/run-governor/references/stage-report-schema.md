@@ -9,6 +9,8 @@ Stage report detail should scale with task complexity, but keep these minimum fi
 5. Decisions made
 6. Next step
 7. Paths to artifacts and logs
+8. Active long-action status, if any
+9. Pending watch or resume actions, if any
 
 ## reports/index.md entry
 

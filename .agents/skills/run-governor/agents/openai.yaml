@@ -1,4 +1,4 @@
 interface:
   display_name: "Run Governor"
-  short_description: "Control run mode, paths, stage reports, and per-run safety allowances."
-  default_prompt: "Use run governor to initialize run_id, choose interaction mode, enforce stage reporting, and manage per-run safety policy for research execution."
+  short_description: "Control run mode, durable action tracking, stage reports, and per-run safety allowances."
+  default_prompt: "Use run governor to initialize run policy, choose interaction mode, reconcile active long-running actions, and compile persistent user intent into execution_intent, completion_policy, promotion gates, non-regression guards, backup policy, and done guards. Full-auto reduces interruptions; it does not authorize premature completion. Enforce watch/resume policy, emit stage reports, and manage per-run safety policy for research execution."

@@ -1,4 +1,4 @@
 interface:
   display_name: "Memory Manager"
-  short_description: "Maintain working todo memory and reusable research records."
-  default_prompt: "Use memory manager to keep working state fresh, track active/done/blocked todos, write evidence-linked episode/procedure/insight records, and use the shared memory repo only as a read-only retrieval source unless an approved export is happening."
+  short_description: "Retrieve reusable experience aggressively and keep working continuity durable."
+  default_prompt: "Use memory manager to retrieve procedures, episodes, and insights aggressively before acting, keep working state durable for resume/recovery, write concise working deltas after each batch, and use the shared memory repo only as a read-only retrieval source unless an approved export is happening."
